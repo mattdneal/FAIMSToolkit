@@ -369,6 +369,10 @@ GPLVMCrossValidation <- function(data.train,
                                  extraData=NULL,
                                  tuneKFolds=2, tuneRepeats=5, tuneLength=5,
                                  ...) {
+  if (!requireNamespace("GPLVM", quietly = TRUE)) {
+    stop("Package GPLVM needed for this function to work. Please install it.",
+         call. = FALSE)
+  }
 
   stopifnot(is.logical(targetValues))
   stopifnot(is.array(data.train))

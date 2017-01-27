@@ -15,3 +15,5 @@ Imports:
   caret,
   pROC,
   wavethresh
+Suggests:
+  GPLVM
