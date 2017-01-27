@@ -13,7 +13,7 @@ threshold <- function(scores, threshold) {
 }
 
 nKeep <- function(scores, nKeep) {
-  return(order(scores, decreasing=F)[1:max(nKeep,2)])
+  return(order(scores, decreasing=F)[1:nKeep])
 }
 
 #' Run a set of classification models on input training, test data sets
@@ -54,7 +54,12 @@ ClassifierModels <- function(data.train, targetValues, data.test,
                                    method=model,
                                    trControl = tc,
                                    tuneLength=tuneLength),
-                             error=function(e) NA)
+                             error=function(e) {
+                               # convert error to a warning and return NA so we can keep going
+                               warning(e)
+                               return(NA)
+                               }
+                             )
     if (!is.na(trainedModel)) {
       predictions[, model] <- predict(trainedModel, data.test, type="prob")[, 1]
     } else {
@@ -239,8 +244,18 @@ CrossValidation <- function(data.train,
     }
   }
 
+  foldProgressBar <- tcltk::tkProgressBar(title="Fold progress",
+                                          label=paste("0/", nFolds, sep=""),
+                                          min = 0,
+                                          max = nFolds,
+                                          initial = 0,
+                                          width = 300)
   for (fold in 1:nFolds){
     cat('Starting fold ', fold, " of ", nFolds, fill=TRUE)
+
+    foldProgressBar <- tcltk::setTkProgressBar(pb=foldProgressBar,
+                                               label=paste(fold, "/", nFolds, sep=""),
+                                               value = fold)
     ##SEPARATE DATA INTO TRAINING, TEST SETS
     index           = which(folds == fold)
     testData        = data.train[index,]
@@ -257,7 +272,7 @@ CrossValidation <- function(data.train,
       selected <- SGoF(scores, alpha)
       out$selected$SGoF[[as.character(alpha)]][[fold]] <- selected
 
-      cat("SGoF ", alpha, ": ", length(selected), "variables selected")
+      cat("SGoF ", alpha, ": ", length(selected), "variables selected", fill=TRUE)
 
       working <- runFold(trainingData=trainingData,
                          trainingTargets=trainingTargets,
@@ -281,7 +296,7 @@ CrossValidation <- function(data.train,
       selected <- nKeep(scores, keep)
       out$selected$nKeep[[as.character(keep)]][[fold]] <- selected
 
-      cat("Keeping ", keep, " top variables")
+      cat("Keeping ", keep, " top variables", fill=TRUE)
 
       working <- runFold(trainingData,
                          trainingTargets,
@@ -305,7 +320,7 @@ CrossValidation <- function(data.train,
       selected <- threshold(scores, i)
       out$selected$threshold[[as.character(i)]][[fold]] <- selected
 
-      cat("Threshold ", i, ": ", length(selected), "variables selected")
+      cat("Threshold ", i, ": ", length(selected), "variables selected", fill=TRUE)
 
       working <- runFold(trainingData,
                          trainingTargets,
