@@ -342,6 +342,7 @@ CrossValidation <- function(data.train,
 
 
   }
+  close(foldProgressBar)
   return(out)
 }
 ##*****************************************************************************
