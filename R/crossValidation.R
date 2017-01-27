@@ -253,9 +253,9 @@ CrossValidation <- function(data.train,
   for (fold in 1:nFolds){
     cat('Starting fold ', fold, " of ", nFolds, fill=TRUE)
 
-    foldProgressBar <- tcltk::setTkProgressBar(pb=foldProgressBar,
-                                               label=paste(fold, "/", nFolds, sep=""),
-                                               value = fold)
+    tcltk::setTkProgressBar(pb=foldProgressBar,
+                            label=paste(fold, "/", nFolds, sep=""),
+                            value = fold)
     ##SEPARATE DATA INTO TRAINING, TEST SETS
     index           = which(folds == fold)
     testData        = data.train[index,]
