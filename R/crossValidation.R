@@ -353,7 +353,6 @@ CrossValidation <- function(data.train,
 #'
 #' @return
 #' @export
-#' @import GPLVM
 #'
 #' @examples
 GPLVMCrossValidation <- function(data.train,
