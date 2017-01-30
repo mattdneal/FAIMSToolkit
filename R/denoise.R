@@ -6,14 +6,16 @@
 #' the noise pixels, and subtracts this from the absolute value of each pixels,
 #' zeroing any values which are negative after subtracting background noise.
 #'
-#' @param dataMatrix FAIMS data matrix
+#' @param FAIMSObject FAIMS object
 #' @param fractionNoise The percentage of pixels to identify as "noise"
 #' @param fractionToRemove The quantile value of the noise pixels to subtract from
 #' all pixels
 #'
 #' @return a denoised FAIMS data matrix
 #' @export
-denoiseFaimsData <- function(dataMatrix, fractionNoise=0.05, fractionToRemove=0.99) {
+denoiseFaimsData <- function(faimsObject, fractionNoise=0.05, fractionToRemove=0.99) {
+  if (!inherits(faimsObject, "FAIMS")) stop("faimsObject must inherit class FAIMS")
+  dataMatrix <- faimsObject$data
   dataColSums <- abs(colSums(dataMatrix))
   threshold <- quantile(dataColSums, fractionNoise)
   noise <- which(dataColSums < threshold)
@@ -23,13 +25,14 @@ denoiseFaimsData <- function(dataMatrix, fractionNoise=0.05, fractionToRemove=0.
 
   dataMatrix <- dataMatrix - noiseThreshold
   dataMatrix[dataMatrix < 0] <- 0
-
-  return(dataMatrix)
+  out <- faimsObject
+  out$data <- dataMatrix
+  return(out)
 }
 
 getNeighbourIndices <- function(index, width, height, faimsDim) {
   rowNeighbours <- (index - width):(index + width)
-  keepRowNeighbours <- ceiling(rowNeighbours / 512) == ceiling(index / 512)
+  keepRowNeighbours <- ceiling(rowNeighbours / faimsDim[1]) == ceiling(index / faimsDim[1])
   rowNeighbours <- rowNeighbours[keepRowNeighbours]
 
   neighbours <- c()
@@ -57,19 +60,21 @@ getNeighbourIndices <- function(index, width, height, faimsDim) {
 #' function zeroes out a fraction of pixels with the lowest degree of local
 #' correlation.
 #'
-#' @param dataMatrix FAIMS data matrix
+#' @param FAIMSObject a FAIMS object
 #' @param neighbourhoodSize the size of the neighbourhood in which to look for local correlations
 #' @param alpha p-value required for a pixel to be considered correlated to its neighbours
 #'
 #' @return A FAIMS data matrix
 #' @export
-denoiseFaimsData.localCorr <- function(dataMatrix,
+denoiseFaimsData.localCorr <- function(FAIMSObject,
                                        neighbourhoodSizeCol=1, neighbourhoodSizeRow=1,
                                        alpha=0.05, plot=TRUE) {
+  if (!inherits(faimsObject, "FAIMS")) stop("faimsObject must inherit class FAIMS")
+  dataMatrix <- FAIMSObject$data
+  faimsDim <- FAIMSObject$faimsDim
 
   n <- nrow(dataMatrix)
   scores <- numeric(ncol(dataMatrix))
-  faimsDim <- attr(dataMatrix, faimsDimName)
   dataMatrix <- scale(dataMatrix, center=T, scale=F)
   for (i in 1:ncol(dataMatrix)) {
     var.cor <- cor(rowMeans(dataMatrix[,getNeighbourIndices(i,
@@ -95,7 +100,6 @@ denoiseFaimsData.localCorr <- function(dataMatrix,
   } else {
     stop("No non-noise pixels found.")
   }
-
-  attr(dataMatrix, faimsDimName) <- faimsDim
-  return(dataMatrix)
+  FAIMSObject$data <- dataMatrix
+  return(FAIMSObject)
 }

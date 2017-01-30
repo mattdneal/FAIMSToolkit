@@ -4,19 +4,26 @@
 \alias{ReadInFaimsDirectoriesMultiFile}
 \title{Read and combine multiple FAIMS data files per sample}
 \usage{
-ReadInFaimsDirectoriesMultiFile(dataPath, filePatterns, dec = ".",
-  minFlowRate = 1.9)
+ReadInFaimsDirectoriesMultiFile(dataPath, filePatterns = ".*[.](txt|asc)",
+  dec = ".", minFlowRate = 1.9)
 }
 \arguments{
 \item{dataPath}{the directory containing the data}
 
-\item{filePatterns}{a character vector of regular expressions. All files matching this regular expression will be included.}
+\item{filePatterns}{a character vector of regular expressions. All files
+matching this regular expression will be included.}
+
+\item{dec}{Decimal symbol}
+
+\item{minFlowRate}{minimum acceptable flow rate. If min flow rate falls below
+this threshold an error is thrown}
 }
 \value{
 a named matrix with one row per directory
 }
 \description{
-Search for directories containing FAIMS data below a specified directory, and return a named matrix with one row per directory.
-Multiple file patterns may be passed as a character vector to combine multiple files per directory.
+Search for directories containing FAIMS data below a specified directory, and
+return a named matrix with one row per directory. Multiple file patterns may
+be passed as a character vector to combine multiple files per directory.
 }
 

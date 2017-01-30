@@ -17,6 +17,14 @@ ReadInFaimsDirectoriesAutosampler(dataPath, numRuns,
 
 \item{runNumPattern}{a regex which should match the run number of your data.
 Any characters found will be stripped and the result converted using as.numeric}
+
+\item{dec}{Decimal symbol}
+
+\item{minFlowRate}{minimum acceptable flow rate. If min flow rate falls below
+this threshold an error is thrown}
+}
+\value{
+A FAIMS object
 }
 \description{
 Read FAIMS data generated using an autosampler

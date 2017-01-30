@@ -7,7 +7,12 @@
 FeatureSelection(dataMatrix, targetValues)
 }
 \arguments{
-\item{nKeep}{}
+\item{dataMatrix}{a numeric matrix of training data}
+
+\item{targetValues}{class labels (must be a logical vector)}
+}
+\value{
+a list of scores, one for each sample. Lower is better.
 }
 \description{
 perform a feature selection using a Wilcoxon rank-sum test

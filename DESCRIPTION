@@ -1,7 +1,7 @@
 Package: FAIMSToolkit
 Type: Package
 Title: Tools to aid in the analysis of FAIMS data
-Version: 0.1.5
+Version: 0.2.0
 Authors@R: as.person(c(
     "Matthew Neal <mattdneal@gmail.com> [aut, cre]",
     "Richard Savage <r.s.savage@warwick.ac.uk> [aut]"
@@ -17,4 +17,5 @@ Imports:
   wavethresh,
   tcltk
 Suggests:
-  GPLVM
+  GPLVM,
+  viridis

@@ -8,15 +8,25 @@ ClassifierModels(data.train, targetValues, data.test, models, kFolds = 2,
   repeats = 5, tuneLength = 5, verbose = F)
 }
 \arguments{
-\item{data.train}{a (nItems * nFeatures) data frame}
+\item{data.train}{a data frame of training data}
 
 \item{targetValues}{a logical vector}
 
-\item{data.test}{a (nItems * nFeatures) data frame}
+\item{data.test}{a data frame of test data (columns must match \code{data.train})}
+
+\item{models}{a list of \link{caret::train} models to run}
+
+\item{kFolds}{number of folds for model selection within each fold}
+
+\item{repeats}{number of repeats for model selection within each fold}
+
+\item{tuneLength}{number of parameters to tune}
+
+\item{verbose}{verbose output if TRUE}
 }
 \value{
 a data frame containing prediction probabilities for each classification algorithm.
-These are the predicted probabililty of outcome==TRUE
+These are the predicted probabililty of \code{targetValues==TRUE}
 }
 \description{
 Run a set of classification models on input training, test data sets

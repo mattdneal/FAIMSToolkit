@@ -4,10 +4,13 @@
 \alias{WaveletTransform}
 \title{Perform a 1D wavelet transform on a FAIMS data matrix}
 \usage{
-WaveletTransform(dataMatrix, discardTopLevels = 1)
+WaveletTransform(FAIMSObject, discardTopLevels = 2)
 }
 \arguments{
-\item{dataMatrix}{FAIMS data}
+\item{FAIMSObject}{a FAIMS object}
+
+\item{discardTopLevels}{number of levels to discard as noise (0 keeps all
+data)}
 }
 \value{
 a matrix of wavelet-transformed FAIMS data

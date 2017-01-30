@@ -7,10 +7,11 @@
 plotRocCurve(rocCurve, titleString = "", ci = TRUE)
 }
 \arguments{
-\item{ciobj}{}
-}
-\value{
+\item{rocCurve}{A ROC object}
 
+\item{titleString}{Title for plot}
+
+\item{ci}{Plot confidence intervals if TRUE}
 }
 \description{
 Plot a ROC curve with CI

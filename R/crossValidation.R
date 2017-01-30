@@ -18,12 +18,17 @@ nKeep <- function(scores, nKeep) {
 
 #' Run a set of classification models on input training, test data sets
 #'
-#' @param data.train a (nItems * nFeatures) data frame
+#' @param data.train a data frame of training data
 #' @param targetValues a logical vector
-#' @param data.test a (nItems * nFeatures) data frame
+#' @param data.test a data frame of test data (columns must match \code{data.train})
+#' @param models a list of \link{caret::train} models to run
+#' @param kFolds number of folds for model selection within each fold
+#' @param repeats number of repeats for model selection within each fold
+#' @param tuneLength number of parameters to tune
+#' @param verbose verbose output if TRUE
 #'
 #' @return a data frame containing prediction probabilities for each classification algorithm.
-#'These are the predicted probabililty of outcome==TRUE
+#'These are the predicted probabililty of \code{targetValues==TRUE}
 #'
 #' @importFrom caret train trainControl
 ClassifierModels <- function(data.train, targetValues, data.test,
@@ -72,19 +77,19 @@ ClassifierModels <- function(data.train, targetValues, data.test,
 
 #' Utility function to create predictions for a given fold and set of variables
 #'
-#' @param trainingData
-#' @param trainingTargets
-#' @param testData
-#' @param models
-#' @param tuneKFolds
-#' @param tuneRepeats
-#' @param PCA
-#' @param verbose
-#' @param tuneLength
-#' @param keep
-#' @param extraTrainingData
-#' @param extraTestData
-#' @param heatmap
+#' @param trainingData A data frame of training data
+#' @param trainingTargets A logical vector of training class labels
+#' @param testData A data frame of test data
+#' @param models A vector of \link{caret::train} models
+#' @param tuneKFolds number of folds for parameter tuning
+#' @param tuneRepeats number of repeats for parameter tuning
+#' @param PCA apply PCA?
+#' @param verbose verbose output?
+#' @param tuneLength number of parameters to try when tuning
+#' @param keep numeric vector of column indices to keep in training and test data
+#' @param extraTrainingData additional training data
+#' @param extraTestData additional test data
+#' @param heatmap plot a heatmap before training models?
 #'
 #' @return predictions for this fold
 runFold <- function(trainingData,
@@ -147,26 +152,38 @@ runFold <- function(trainingData,
 
 #' Cross-validation for classification models
 #'
-#' @param data.train
-#' @param targetValues
-#' @param nFolds
-#' @param threshold
-#' @param nKeep
-#' @param verbose
-#' @param heatmap
-#' @param PCA
-#' @param extraData
+#' @param data.train Training data to be divided into folds (must be a data
+#'   frame)
+#' @param targetValues Target responses
+#' @param models list of \link{caret::train} models to train
+#' @param nFolds number of folds
+#' @param stratified TRUE for stratified folds
+#' @param threshold list of threshold p-values for selecting features to keep
+#' @param nKeep list of number of features to keep
+#' @param SGoF alpha for Sequential Goodness of Fit selection of features
+#' @param verbose TRUE for verbose output
+#' @param heatmap TRUE to plot a heatmap of selected features for each fold
+#' @param PCA TRUE to apply PCA to selected features in each fold
+#' @param extraData any additional data to add to training data after feature
+#'   selection
+#' @param tuneKFolds number of folds for tuning models within each fold
+#' @param tuneRepeats number of repeats for tuning models within each fold
+#' @param tuneLength number of parameters to test when tuning models
+#' @param folds optionally pre-specify which samples go in which fold. Should be
+#'   NULL to select folds randomly, or a vector of length
+#'   \code{nrow(data.train)} containing values in \code{seq(nFolds)}
 #'
-#' @return
+#' @return A list of predictions for the given model combinations, ready to be
+#'   passed to \link{CrossValRocCurves}
 #' @export
 CrossValidation <- function(data.train,
                             targetValues,
-                            models=c("rf", "glmnet", "svmRadial", "svmLinear", "gbm", "nnet"),
+                            models=c("rf", "glmnet", "svmRadial", "svmLinear", "gbm", "nnet", "glm"),
                             nFolds=10,
                             stratified=TRUE,
-                            SGoF=NULL,
                             threshold=NULL,
                             nKeep=NULL,
+                            SGoF=NULL,
                             verbose=FALSE,
                             heatmap=FALSE,
                             PCA=FALSE,
@@ -345,32 +362,8 @@ CrossValidation <- function(data.train,
   close(foldProgressBar)
   return(out)
 }
-##*****************************************************************************
-##*****************************************************************************
-##----------------------------------------------------------------------
-## ----------------------------------------
-##----------------------------------------------------------------------
 
-#' Title
-#'
-#' @param data.train
-#' @param targetValues
-#' @param models
-#' @param nFolds
-#' @param stratified
-#' @param sigma_d
-#' @param verbose
-#' @param heatmap
-#' @param PCA
-#' @param extraData
-#' @param tuneKFolds
-#' @param tuneRepeats
-#' @param tuneLength
-#'
-#' @return
-#' @export
-#'
-#' @examples
+#EXPERIMENTAL
 GPLVMCrossValidation <- function(data.train,
                                  targetValues,
                                  models=c("rf", "glmnet", "svmRadial", "svmLinear", "gbm", "nnet"),

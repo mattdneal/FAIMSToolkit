@@ -4,12 +4,25 @@
 \alias{convertToArray}
 \title{Convert FAIMS data to an array}
 \usage{
-convertToArray(data)
+convertToArray(FAIMSObject, keepMatrixData = TRUE)
 }
 \arguments{
-\item{data}{Faims data matrix}
+\item{FAIMSObject}{A FAIMS object}
+
+\item{keepMatrixData}{Whether to keep the matrix-shaped FAIMS data}
+}
+\value{
+A FAIMSArray object (also inheriting FAIMS if
+  \code{keepMatrixData=TRUE})
 }
 \description{
-Convert FAIMS data to an array
+Converts a FAIMS object to a FAIMSArray object, with the data stored in a
+5-dimensional array. The dimensions correspond to sample ID, CV, dispersion
+field strength, polarity, and runNumber.
+}
+\details{
+If keepMatrixData=TRUE, the output inherits both FAIMS and FAIMSArray.
+Otherwise, it only inherits FAIMSArray and will not work with functions which
+require FAIMS objects.
 }
 

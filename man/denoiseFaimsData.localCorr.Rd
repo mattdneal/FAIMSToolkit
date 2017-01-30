@@ -4,11 +4,11 @@
 \alias{denoiseFaimsData.localCorr}
 \title{Remove background noise from FAIMS data using local correlations}
 \usage{
-denoiseFaimsData.localCorr(dataMatrix, neighbourhoodSizeCol = 1,
+denoiseFaimsData.localCorr(FAIMSObject, neighbourhoodSizeCol = 1,
   neighbourhoodSizeRow = 1, alpha = 0.05, plot = TRUE)
 }
 \arguments{
-\item{dataMatrix}{FAIMS data matrix}
+\item{FAIMSObject}{a FAIMS object}
 
 \item{alpha}{p-value required for a pixel to be considered correlated to its neighbours}
 

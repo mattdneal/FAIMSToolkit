@@ -5,13 +5,51 @@
 \title{Cross-validation for classification models}
 \usage{
 CrossValidation(data.train, targetValues, models = c("rf", "glmnet",
-  "svmRadial", "svmLinear", "gbm", "nnet"), nFolds = 10, stratified = TRUE,
-  SGoF = NULL, threshold = NULL, nKeep = NULL, verbose = FALSE,
-  heatmap = FALSE, PCA = FALSE, extraData = NULL, tuneKFolds = 2,
-  tuneRepeats = 5, tuneLength = 5, folds = NULL)
+  "svmRadial", "svmLinear", "gbm", "nnet", "glm"), nFolds = 10,
+  stratified = TRUE, threshold = NULL, nKeep = NULL, SGoF = NULL,
+  verbose = FALSE, heatmap = FALSE, PCA = FALSE, extraData = NULL,
+  tuneKFolds = 2, tuneRepeats = 5, tuneLength = 5, folds = NULL)
 }
 \arguments{
-\item{extraData}{}
+\item{data.train}{Training data to be divided into folds (must be a data
+frame)}
+
+\item{targetValues}{Target responses}
+
+\item{models}{list of \link{caret::train} models to train}
+
+\item{nFolds}{number of folds}
+
+\item{stratified}{TRUE for stratified folds}
+
+\item{threshold}{list of threshold p-values for selecting features to keep}
+
+\item{nKeep}{list of number of features to keep}
+
+\item{SGoF}{alpha for Sequential Goodness of Fit selection of features}
+
+\item{verbose}{TRUE for verbose output}
+
+\item{heatmap}{TRUE to plot a heatmap of selected features for each fold}
+
+\item{PCA}{TRUE to apply PCA to selected features in each fold}
+
+\item{extraData}{any additional data to add to training data after feature
+selection}
+
+\item{tuneKFolds}{number of folds for tuning models within each fold}
+
+\item{tuneRepeats}{number of repeats for tuning models within each fold}
+
+\item{tuneLength}{number of parameters to test when tuning models}
+
+\item{folds}{optionally pre-specify which samples go in which fold. Should be
+NULL to select folds randomly, or a vector of length
+\code{nrow(data.train)} containing values in \code{seq(nFolds)}}
+}
+\value{
+A list of predictions for the given model combinations, ready to be
+  passed to \link{CrossValRocCurves}
 }
 \description{
 Cross-validation for classification models

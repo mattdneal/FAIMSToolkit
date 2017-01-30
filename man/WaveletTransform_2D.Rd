@@ -4,14 +4,22 @@
 \alias{WaveletTransform_2D}
 \title{Perform a 2D wavelet transform on a FAIMS data matrix}
 \usage{
-WaveletTransform_2D(dataMatrix, cropSize = NULL, discardHighestNLevels = 0)
+WaveletTransform_2D(FAIMSObject, cropSize = NULL, discardHighestNLevels = 2)
 }
 \arguments{
-\item{cropSize}{}
+\item{FAIMSObject}{A FAIMS object}
+
+\item{cropSize}{size to crop image to}
+
+\item{discardHighestNLevels}{number of levels to discard as noise}
+}
+\value{
+A matrix of wavelet-transformed FAIMS data
 }
 \description{
 This function expects an input matrix of dimension (nDataItems * nFeatures)
 each row is therefore the 1D representation of the 2D data for a single item
-This means that this function needs to know the underlying dimensionality of the 2D FAIMS run
+This means that this function needs to know the underlying dimensionality of
+the 2D FAIMS run
 }
 

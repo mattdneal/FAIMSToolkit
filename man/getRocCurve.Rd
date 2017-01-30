@@ -8,9 +8,20 @@ getRocCurve(predictions, targetValues, titleString = "", ci = FALSE,
   lr = FALSE, plotCurve = FALSE)
 }
 \arguments{
+\item{predictions}{vector of predictions}
+
+\item{targetValues}{vector of class labels}
+
+\item{titleString}{title string if \code{plotCurve==TRUE}}
+
 \item{ci}{Compute confidence interval?}
 
-\item{lr}{}
+\item{lr}{Compute likelihood ratios?}
+
+\item{plotCurve}{plot the resulting ROC curve?}
+}
+\value{
+a \link{pROC::roc} object
 }
 \description{
 Return a ROC curve object, given input class probabilities

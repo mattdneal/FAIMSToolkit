@@ -9,7 +9,31 @@ runFold(trainingData, trainingTargets, testData, models, tuneKFolds,
   extraTestData)
 }
 \arguments{
-\item{heatmap}{}
+\item{trainingData}{A data frame of training data}
+
+\item{trainingTargets}{A logical vector of training class labels}
+
+\item{testData}{A data frame of test data}
+
+\item{models}{A vector of \link{caret::train} models}
+
+\item{tuneKFolds}{number of folds for parameter tuning}
+
+\item{tuneRepeats}{number of repeats for parameter tuning}
+
+\item{tuneLength}{number of parameters to try when tuning}
+
+\item{keep}{numeric vector of column indices to keep in training and test data}
+
+\item{PCA}{apply PCA?}
+
+\item{verbose}{verbose output?}
+
+\item{heatmap}{plot a heatmap before training models?}
+
+\item{extraTrainingData}{additional training data}
+
+\item{extraTestData}{additional test data}
 }
 \value{
 predictions for this fold

@@ -7,9 +7,16 @@
 knnMeanDistance(dataMatrix, max.k = 10)
 }
 \arguments{
-\item{max.k}{}
+\item{dataMatrix}{a data matrix}
+
+\item{max.k}{max k for mean k-nn distance}
+}
+\value{
+a \code{nrow(dataMatrix)} by \code{k} matrix with the mean k-nn
+  distance for each sample, with k along the columns and samples along the
+  rows
 }
 \description{
-Find mean k-nearest neighbour distance for each sample
+Compute mean k-nn distances for outlier detection
 }
 

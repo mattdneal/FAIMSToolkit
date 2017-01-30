@@ -8,9 +8,14 @@ ReadInFaimsData(fileList, dec = ".", minFlowRate = 1.9)
 }
 \arguments{
 \item{fileList}{A list of files containing FAIMS data (in ASCII format)}
+
+\item{dec}{Decimal symbol}
+
+\item{minFlowRate}{minimum acceptable flow rate. If min flow rate falls below
+this threshold an error is thrown}
 }
 \value{
-a data matrix containing the FAIMS data (with one row per file)
+A FAIMS object
 }
 \description{
 Read in FAIMS data from a list of files

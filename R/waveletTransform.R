@@ -1,18 +1,23 @@
 #' Perform a 1D wavelet transform on a FAIMS data matrix
 #'
-#' @param dataMatrix FAIMS data
+#' @param FAIMSObject a FAIMS object
+#' @param discardTopLevels number of levels to discard as noise (0 keeps all
+#'   data)
 #'
 #' @return a matrix of wavelet-transformed FAIMS data
 #' @export
 #'
 #' @importFrom wavethresh wd accessD
-WaveletTransform <- function(dataMatrix, discardTopLevels=1){
+WaveletTransform <- function(FAIMSObject, discardTopLevels=2){
+  if (!inherits(FAIMSObject, "FAIMS")) stop("FAIMSObject must inherit class FAIMS")
+
+  dataMatrix <- FAIMSObject$data
+  faimsDim <- FAIMSObject$faimsDim
   ##----------------------------------------------------------------------
   ## FIND USEFUL VALUES --------------------------------------------------
   ##----------------------------------------------------------------------
   nDataItems         = nrow(dataMatrix)
   nFeatures          = ncol(dataMatrix)
-  faimsDim           = attr(dataMatrix, faimsDimName)
   numRows            = faimsDim[1]
   numCols            = nFeatures / faimsDim[1]
   nWavelets          = 2^(ceiling(log2(numRows)) - discardTopLevels)
@@ -21,9 +26,15 @@ WaveletTransform <- function(dataMatrix, discardTopLevels=1){
   ##----------------------------------------------------------------------
   ## GENERATE THE WAVELET TRANSFORMED DATA -------------------------------
   ##----------------------------------------------------------------------
+
+  pb <- progBarInit(c(0, nDataItems * numCols))
+  count <- 0
+
   for (i in 1:nDataItems){
     waveColIndex <- 1
     for (j in 1:numCols) {
+      count <- count + 1
+      pb <- progBarUpdate(pb, count)
       colIndex             = 1:numRows + (j - 1) * numRows
       currentData          = dataMatrix[i, colIndex]
       working              = numeric(2^(ceiling(log2(numRows))))
@@ -46,42 +57,33 @@ WaveletTransform <- function(dataMatrix, discardTopLevels=1){
 
   return(data.wd)
 }
-##*****************************************************************************
-##*****************************************************************************
-##----------------------------------------------------------------------
-## ----------------------------------------
-##----------------------------------------------------------------------
 
-##Function to perform a 2D wavelet transform on an input FAIMS data matrix
-##
-##This function expects an input matrix of dimension (nDataItems * nFeatures)
-##each row is therefore the 1D representation of the 2D data for a single item
-##This means that this function needs to know the underlying dimensionality of the 2D FAIMS run
-##
 #' Perform a 2D wavelet transform on a FAIMS data matrix
 #'
 #' This function expects an input matrix of dimension (nDataItems * nFeatures)
 #' each row is therefore the 1D representation of the 2D data for a single item
-#' This means that this function needs to know the underlying dimensionality of the 2D FAIMS run
+#' This means that this function needs to know the underlying dimensionality of
+#' the 2D FAIMS run
 #'
-#' @param dataMatrix
-#' @param cropSize
+#' @param FAIMSObject A FAIMS object
+#' @param cropSize size to crop image to
+#' @param discardHighestNLevels number of levels to discard as noise
 #'
-#' @return
+#' @return A matrix of wavelet-transformed FAIMS data
 #' @export
 #'
-#' @importFrom wavethresh imwd
-WaveletTransform_2D <- function(dataMatrix, cropSize=NULL, discardHighestNLevels=0){
+#' @importFrom wavethresh imwd lt.to.name
+WaveletTransform_2D <- function(FAIMSObject, cropSize=NULL, discardHighestNLevels=2){
+  if (!inherits(FAIMSObject, "FAIMS")) stop("FAIMSObject must inherit class FAIMS")
 
-  library(wavethresh)
+  dataMatrix <- FAIMSObject$data
+  faimsDim <- FAIMSObject$faimsDim
   ##----------------------------------------------------------------------
   ## FIND USEFUL VALUES --------------------------------------------------
   ##----------------------------------------------------------------------
   dataMatrix <- as.matrix(dataMatrix)
   nDataItems <- nrow(dataMatrix)
   nFeatures <- ncol(dataMatrix)
-
-  faimsDim <- attr(dataMatrix, faimsDimName)
 
   pixelsPerRun <- prod(faimsDim)
 
@@ -90,9 +92,15 @@ WaveletTransform_2D <- function(dataMatrix, cropSize=NULL, discardHighestNLevels
   ##----------------------------------------------------------------------
   ## GENERATE THE WAVELET TRANSFORMED DATA -------------------------------
   ##----------------------------------------------------------------------
+
+  pb <- progBarInit(c(0, nDataItems * nFaimsRuns))
+  count <- 0
+
   for (i in 1:nDataItems){
     working.data <- c()
     for (runNum in 1:nFaimsRuns) {
+      count <- count + 1
+      pb <- progBarUpdate(pb, count)
       currentData <- dataMatrix[i, 1:pixelsPerRun + (runNum - 1) * pixelsPerRun]
       dim(currentData) <- faimsDim
       ##PAD IMAGE WITH ZEROS, TO MAKE A SQUARE MATRIX OF SIZE 2^N
@@ -110,10 +118,9 @@ WaveletTransform_2D <- function(dataMatrix, cropSize=NULL, discardHighestNLevels
       }
       ##WAVELET TRANSFORM
       current.wd            = imwd(data.padded,
-                                   filter.number=10,
-                                   family="DaubLeAsymm",
-                                   type="wavelet",
-                                   bc="symmetric")
+                                   filter.number=1,
+                                   bc="symmetric",
+                                   family = "DaubExPhase")
       nLevels               = current.wd$nlevels-1-discardHighestNLevels
       if (nLevels < 0) stop("Can't discard more levels than are in the transform")
       working.data          = c(working.data, current.wd$w0Lconstant)
@@ -130,18 +137,5 @@ WaveletTransform_2D <- function(dataMatrix, cropSize=NULL, discardHighestNLevels
     data.wd[i, ]         = working.data
   }
 
-  # length(current.wd2$w4L4)   ## 8 levels, level 7 has length 16384 (4 components)
-  ## level 6 has length 4096
-  ## level 5 has length 1024 ....
-  # Number of columns for wavelet transform according to matrix size:
-  #   512x512--> 349525
-  #   256x256--> 87381
-  #   128x128--> 21845 ## additional benefit of dimensionality reduction
-
   return(data.wd)
 }
-##*****************************************************************************
-##*****************************************************************************
-##----------------------------------------------------------------------
-## ----------------------------------------
-##----------------------------------------------------------------------

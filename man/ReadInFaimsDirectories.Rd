@@ -4,19 +4,28 @@
 \alias{ReadInFaimsDirectories}
 \title{Read in FAIMS files from a set of directories}
 \usage{
-ReadInFaimsDirectories(dataPath, filePattern, dec = ".", minFlowRate = 1.9)
+ReadInFaimsDirectories(dataPath, filePattern = ".*[.](txt|asc)", dec = ".",
+  minFlowRate = 1.9)
 }
 \arguments{
 \item{dataPath}{the directory containing the data}
 
-\item{filePattern}{a regular expression. All files matching this regular expression will be included.}
+\item{filePattern}{a regular expression. All files matching this regular
+expression will be included.}
+
+\item{dec}{Decimal symbol}
+
+\item{minFlowRate}{minimum acceptable flow rate. If min flow rate falls below
+this threshold an error is thrown}
 }
 \value{
 A named matrix with one row per data file read
 }
 \description{
-Search for directories containing FAIMS data below a specified directory, and return a named matrix with one row per directory.
-This function will check that there is at least one ingested file for each directory in /code{dataPath}, and return a warning
-if not. If multiple matching files are found an error will be thrown.
+Search for directories containing FAIMS data below a specified directory, and
+return a named matrix with one row per directory. This function will check
+that there is at least one ingested file for each directory in
+/code{dataPath}, and return a warning if not. If multiple matching files are
+found an error will be thrown.
 }
 

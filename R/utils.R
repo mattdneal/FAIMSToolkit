@@ -8,20 +8,22 @@ progBarInit <- function(range) {
   cat("75%")
   cat(rep(" ", 16), sep="")
   cat("100%\n")
-  out <- list(range=range, current=range[1])
+  cat("|")
+  out <- list(range=range, current=range[1], done=FALSE)
 }
 
 progBarUpdate <- function(bar.obj, new.value) {
-  while(bar.obj$current < new.value) {
-    if (bar.obj$current == bar.obj$range[1]
-        | bar.obj$current >= bar.obj$range[2]
-          - (bar.obj$range[2] - bar.obj$range[1]) / 80) {
-      cat("|")
-    } else {
-      cat("-")
+  if (!bar.obj$done) {
+    while(bar.obj$current < new.value) {
+      if (bar.obj$current >= bar.obj$range[2]
+                             - (bar.obj$range[2] - bar.obj$range[1]) / 80) {
+        cat("|\n")
+        bar.obj$done <- TRUE
+      } else {
+        cat("-")
+      }
+      bar.obj$current <- bar.obj$current + (bar.obj$range[2] - bar.obj$range[1]) / 80
     }
-    bar.obj$current <- bar.obj$current + (bar.obj$range[2] - bar.obj$range[1]) / 80
   }
-  if (bar.obj$current >= bar.obj$range[2]) cat("\n")
   return(bar.obj)
 }

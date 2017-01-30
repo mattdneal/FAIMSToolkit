@@ -4,12 +4,9 @@
 \alias{plotFAIMSdata}
 \title{Plot FAIMS data matrices}
 \usage{
-plotFAIMSdata(dataMatrix, rowsToPlot, plotLayout = 1, absolute = T,
-  numRows = 512, ...)
+plotFAIMSdata(FAIMSObject, rowsToPlot, plotLayout = 1, absolute = T, ...)
 }
 \arguments{
-\item{dataMatrix}{a matrix of FAIMS data}
-
 \item{rowsToPlot}{the rows to plot}
 
 \item{plotLayout}{a matrix to specify the layout for multiple plots per page (default is one plot per page)}
@@ -17,6 +14,8 @@ plotFAIMSdata(dataMatrix, rowsToPlot, plotLayout = 1, absolute = T,
 \item{absolute}{whether to plot the absolute value of the FAIMS data.}
 
 \item{...}{additional parameters to pass to \code{image}}
+
+\item{dataMatrix}{a matrix of FAIMS data}
 }
 \description{
 Plot FAIMS data matrices

@@ -1,11 +1,9 @@
 #' perform a feature selection using a Wilcoxon rank-sum test
 #'
-#' @param dataMatrix
-#' @param targetValues
-#' @param threshold
-#' @param nKeep
+#' @param dataMatrix a numeric matrix of training data
+#' @param targetValues class labels (must be a logical vector)
 #'
-#' @return
+#' @return a list of scores, one for each sample. Lower is better.
 #' @export
 FeatureSelection <- function(dataMatrix, targetValues){
 
@@ -34,8 +32,3 @@ FeatureSelection <- function(dataMatrix, targetValues){
 
   return(pValues)
 }
-##*****************************************************************************
-##*****************************************************************************
-##----------------------------------------------------------------------
-## ----------------------------------------
-##----------------------------------------------------------------------

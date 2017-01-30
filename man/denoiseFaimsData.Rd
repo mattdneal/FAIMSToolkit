@@ -4,15 +4,15 @@
 \alias{denoiseFaimsData}
 \title{Remove background noise from FAIMS data}
 \usage{
-denoiseFaimsData(dataMatrix, fractionNoise = 0.05, fractionToRemove = 0.99)
+denoiseFaimsData(faimsObject, fractionNoise = 0.05, fractionToRemove = 0.99)
 }
 \arguments{
-\item{dataMatrix}{FAIMS data matrix}
-
 \item{fractionNoise}{The percentage of pixels to identify as "noise"}
 
 \item{fractionToRemove}{The quantile value of the noise pixels to subtract from
 all pixels}
+
+\item{FAIMSObject}{FAIMS object}
 }
 \value{
 a denoised FAIMS data matrix

@@ -7,7 +7,10 @@
 CrossValRocCurves(crossVal.obj)
 }
 \arguments{
-\item{crossVal.obj}{}
+\item{crossVal.obj}{the output from \link{CrossValidation}}
+}
+\value{
+A list of \link{pROC::roc} objects and a summary of the results
 }
 \description{
 Compute ROC objects for the results of a cross validation

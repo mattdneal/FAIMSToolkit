@@ -1,10 +1,10 @@
 #' Plot a ROC curve with CI
 #'
-#' @param rocCurve
-#' @param titleString
-#' @param ciobj
+#' @param rocCurve A ROC object
+#' @param titleString Title for plot
+#' @param ci Plot confidence intervals if TRUE
 #'
-#' @return
+#' @return NULL
 #'
 #' @importFrom pROC plot.roc
 plotRocCurve <- function(rocCurve, titleString="", ci=TRUE) {
@@ -22,16 +22,19 @@ plotRocCurve <- function(rocCurve, titleString="", ci=TRUE) {
 
   title(paste(titleString, " (auc=", format(auc, digits=2), ") (95% CI: ",
               format(confidence[1], digits=2), ", ", format(confidence[3], digits=2), ")", sep=""))
+  return(NULL)
 }
 
 #' Return a ROC curve object, given input class probabilities
 #'
-#' @param predictions
-#' @param targetValues
+#' @param predictions vector of predictions
+#' @param targetValues vector of class labels
+#' @param titleString title string if \code{plotCurve==TRUE}
 #' @param ci Compute confidence interval?
-#' @param lr
+#' @param lr Compute likelihood ratios?
+#' @param plotCurve plot the resulting ROC curve?
 #'
-#' @return
+#' @return a \link{pROC::roc} object
 #' @export
 #'
 #'@importFrom pROC roc ci.se
@@ -121,9 +124,9 @@ getRocCurve <- function(predictions, targetValues, titleString="", ci=FALSE, lr=
 
 #' Compute ROC objects for the results of a cross validation
 #'
-#' @param crossVal.obj
+#' @param crossVal.obj the output from \link{CrossValidation}
 #'
-#' @return
+#' @return A list of \link{pROC::roc} objects and a summary of the results
 #' @export
 CrossValRocCurves <- function(crossVal.obj) {
   out <- list()
