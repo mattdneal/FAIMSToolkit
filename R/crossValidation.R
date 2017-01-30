@@ -240,7 +240,7 @@ CrossValidation <- function(data.train,
                            stratified=stratified)
   } else {
     # do some checks
-    if(nfolds != max(folds)) stop("folds does not match nfolds")
+    if(nFolds != max(folds)) stop("folds does not match nfolds")
     if(!all(seq(max(folds)) %in% folds)) stop("Some folds are empty")
     if(length(folds) != length(targetValues)) stop("length(folds) != length(targetValues")
   }
