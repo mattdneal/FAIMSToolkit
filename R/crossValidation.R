@@ -16,6 +16,32 @@ nKeep <- function(scores, nKeep) {
   return(order(scores, decreasing=F)[1:nKeep])
 }
 
+#' Title Generate a division of a data set into folds
+#'
+#' @param targetValues the class labels
+#' @param nFolds number of folds
+#' @param stratified whether folds should be stratified by \code{targetValues}
+#'
+#' @return a vector giving the fold for each sample
+#' @export
+#'
+#' @examples
+#' classes <- sample(c(rep(TRUE, 20), rep(FALSE, 50)), 70)
+#' folds <- generateFolds(classes, 10, T)
+generateFolds <- function(targetValues, nFolds, stratified=T) {
+  nDataItems <- length(targetValues)
+  if (stratified) {
+    folds <- numeric(nDataItems)
+    nPos <- sum(targetValues)
+    nNeg <- sum(!targetValues)
+    folds[targetValues] <- sample(rep(1:nFolds, length.out=nPos), nPos)
+    folds[!targetValues] <- sample(rep(1:nFolds, length.out=nNeg), nNeg)
+  } else {
+    folds <- sample(rep(1:nFolds, length.out=nDataItems), nDataItems)
+  }
+  return(folds)
+}
+
 #' Run a set of classification models on input training, test data sets
 #'
 #' @param data.train a data frame of training data
@@ -209,15 +235,9 @@ CrossValidation <- function(data.train,
   nModels <- length(models)
 
   if (is.null(folds)) {
-    if (stratified) {
-      folds <- numeric(nDataItems)
-      nPos <- sum(targetValues)
-      nNeg <- sum(!targetValues)
-      folds[targetValues] <- sample(rep(1:nFolds, length.out=nPos), nPos)
-      folds[!targetValues] <- sample(rep(1:nFolds, length.out=nNeg), nNeg)
-    } else {
-      folds <- sample(rep(1:nFolds, length.out=nDataItems), nDataItems)
-    }
+    folds <- generateFolds(targetValues=targetValues,
+                           nFolds=nFolds,
+                           stratified=stratified)
   } else {
     # do some checks
     if(nfolds != max(folds)) stop("folds does not match nfolds")
@@ -397,15 +417,9 @@ GPLVMCrossValidation <- function(data.train,
   ##----------------------------------------------------------------------
   nModels <- length(models)
 
-  if (stratified) {
-    folds <- numeric(nDataItems)
-    nPos <- sum(targetValues)
-    nNeg <- sum(!targetValues)
-    folds[targetValues] <- sample(rep(1:nFolds, length.out=nPos), nPos)
-    folds[!targetValues] <- sample(rep(1:nFolds, length.out=nNeg), nNeg)
-  } else {
-    folds <- sample(rep(1:nFolds, length.out=nDataItems), nDataItems)
-  }
+  folds <- generateFolds(targetValues=targetValues,
+                         nFolds=nFolds,
+                         stratified=stratified)
 
 
   out <- list()
