@@ -8,7 +8,8 @@ CrossValidation(data.train, targetValues, models = c("rf", "glmnet",
   "svmRadial", "svmLinear", "gbm", "nnet", "glm"), nFolds = 10,
   stratified = TRUE, threshold = NULL, nKeep = NULL, SGoF = NULL,
   verbose = FALSE, heatmap = FALSE, PCA = FALSE, extraData = NULL,
-  tuneKFolds = 2, tuneRepeats = 5, tuneLength = 5, folds = NULL)
+  tuneKFolds = 2, tuneRepeats = 5, tuneLength = 5, folds = NULL,
+  precomputedScores = NULL)
 }
 \arguments{
 \item{data.train}{Training data to be divided into folds (must be a data
@@ -46,6 +47,10 @@ selection}
 \item{folds}{optionally pre-specify which samples go in which fold. Should be
 NULL to select folds randomly, or a vector of length
 \code{nrow(data.train)} containing values in \code{seq(nFolds)}}
+
+\item{precomputedScores}{precomputed scores of features for each fold. A
+sample of 100 will be tested for each fold and an error thrown in the event
+of discrepancies.}
 }
 \value{
 A list of predictions for the given model combinations, ready to be

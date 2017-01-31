@@ -149,7 +149,7 @@ runFold <- function(trainingData,
     testData     = cbind(testData,     extraTestData)
   }
   ##OPTION TO RUN PCA ON THE FEATURES
-  if (PCA){
+  if (PCA & ncol(trainingData) > 1){
     model.pca = prcomp(trainingData)
     cum.var   = 0
     k         = 1
@@ -198,6 +198,9 @@ runFold <- function(trainingData,
 #' @param folds optionally pre-specify which samples go in which fold. Should be
 #'   NULL to select folds randomly, or a vector of length
 #'   \code{nrow(data.train)} containing values in \code{seq(nFolds)}
+#' @param precomputedScores precomputed scores of features for each fold. A
+#'   sample of 100 will be tested for each fold and an error thrown in the event
+#'   of discrepancies.
 #'
 #' @return A list of predictions for the given model combinations, ready to be
 #'   passed to \link{CrossValRocCurves}
@@ -215,7 +218,8 @@ CrossValidation <- function(data.train,
                             PCA=FALSE,
                             extraData=NULL,
                             tuneKFolds=2, tuneRepeats=5, tuneLength=5,
-                            folds=NULL){
+                            folds=NULL,
+                            precomputedScores=NULL){
   ##----------------------------------------------------------------------
   ## ASSERTIONS ABOUT THE INPUT ------------------------------------------
   ##----------------------------------------------------------------------
@@ -301,7 +305,18 @@ CrossValidation <- function(data.train,
     extraTrainingData = extraData[-index, , drop=FALSE]
     extraTestData = extraData[index, , drop=FALSE]
     ##OPTION TO RUN SIMPLE FEATURE PRE-SELECTION USING THE CURRENT TRAINING SET
-    scores <- FeatureSelection(trainingData, trainingTargets)
+    if (is.null(precomputedScores)) {
+      scores <- FeatureSelection(trainingData, trainingTargets)
+    } else {
+      scores <- precomputedScores[[fold]]
+
+      # Check a subset of the scores match
+      scoreTestIndices <- sample(ncol(trainingData), min(ncol(trainingData), 100))
+      scoreTestCheck <- FeatureSelection(trainingData[, scoreTestIndices], trainingTargets)
+      if (any(scoreTestCheck != scores[scoreTestIndices])) {
+        stop(paste("Precomputed scores for fold", fold, "did not match for a sample of features."))
+      }
+    }
 
     out$scores[[fold]] <- scores
 
