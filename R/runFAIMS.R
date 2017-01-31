@@ -37,7 +37,7 @@ runFAIMS <- function(FAIMSObject, targetValues, models=c("rf", "glmnet", "svmRad
 
   # Select a classifier method
   out$modelSelect$folds <- generateFolds(targetValues, 10, T)
-  out$modelSelect$pca.cv <- CrossValidation(waveletData,
+  out$modelSelect$pca.cv <- CrossValidation(out$waveletData,
                                             targetValues,
                                             models=models,
                                             PCA=T,
@@ -47,7 +47,7 @@ runFAIMS <- function(FAIMSObject, targetValues, models=c("rf", "glmnet", "svmRad
                                             nFolds=10)
 
   out$modelSelect$scores <- out$modelSelect$pca.cv$scores
-  out$modelSelect$nopca.cv <- CrossValidation(waveletData,
+  out$modelSelect$nopca.cv <- CrossValidation(out$waveletData,
                                               targetValues,
                                               models=models,
                                               PCA=F,
@@ -71,7 +71,7 @@ runFAIMS <- function(FAIMSObject, targetValues, models=c("rf", "glmnet", "svmRad
 
   params <- setParams(out$modelSelect$pca.bestModel)
   out$bestModel$pca.cv <-
-    CrossValidation(waveletData,
+    CrossValidation(out$waveletData,
                     targetValues,
                     models=unique(c("glm", params$model)),
                     PCA=T,
@@ -85,7 +85,7 @@ runFAIMS <- function(FAIMSObject, targetValues, models=c("rf", "glmnet", "svmRad
   params <- setParams(out$modelSelect$nopca.bestModel)
 
   out$bestModel$nopca.cv <-
-    CrossValidation(waveletData,
+    CrossValidation(out$waveletData,
                     targetValues,
                     models=unique(c("glm", params$model)),
                     PCA=F,
@@ -102,7 +102,7 @@ runFAIMS <- function(FAIMSObject, targetValues, models=c("rf", "glmnet", "svmRad
   # Rerun the best classifier for PCA and no PCA with scrambled class labels
   params <- setParams(out$modelSelect$pca.bestModel)
   out$bestModel$scrambled.pca.cv <-
-    CrossValidation(waveletData,
+    CrossValidation(out$waveletData,
                     out$targetValues.scrambled,
                     models=unique(c("glm", params$model)),
                     PCA=T,
@@ -116,7 +116,7 @@ runFAIMS <- function(FAIMSObject, targetValues, models=c("rf", "glmnet", "svmRad
   params <- setParams(out$modelSelect$nopca.bestModel)
 
   out$bestModel$scrambled.nopca.cv <-
-    CrossValidation(waveletData,
+    CrossValidation(out$waveletData,
                     targetValues.scrambled,
                     models=unique(c("glm", params$model)),
                     PCA=F,
