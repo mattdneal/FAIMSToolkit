@@ -117,7 +117,7 @@ runFAIMS <- function(FAIMSObject, targetValues, models=c("rf", "glmnet", "svmRad
 
   out$bestModel$scrambled.nopca.cv <-
     CrossValidation(out$waveletData,
-                    targetValues.scrambled,
+                    out$targetValues.scrambled,
                     models=unique(c("glm", params$model)),
                     PCA=F,
                     nKeep=params$nKeep,
