@@ -47,4 +47,5 @@ deleteFAIMSSample <- function(FAIMSObject, deleteIndices) {
       class(out) <- c(class(out), "FAIMSArray")
     }
   }
+  return(out)
 }
