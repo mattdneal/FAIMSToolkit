@@ -96,7 +96,7 @@ runFAIMS <- function(FAIMSObject, targetValues,
                     threshold=params$threshold,
                     folds=out$bestModel$folds,
                     nFolds=10,
-                    precomputedScores=modelSelectScores)
+                    precomputedScores=bestModelScores)
   out$bestModel$scores <- out$bestModel$pca.cv$scores
 
   params <- setParams(out$modelSelect$nopca.bestModel)
