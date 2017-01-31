@@ -62,9 +62,9 @@ runFAIMS <- function(FAIMSObject, targetValues, models=c("rf", "glmnet", "svmRad
 
 
   out$modelSelect$pca.bestModel <-
-    out$modelSelect$pca.results$summary[which.max(out$modelSelect$pca.results$auc), ]
+    out$modelSelect$pca.results$summary[which.max(out$modelSelect$pca.results$summary$auc), ]
   out$modelSelect$nopca.bestModel <-
-    out$modelSelect$nopca.results$summary$classifierMethod[which.max(out$modelSelect$nopca.results$auc), ]
+    out$modelSelect$nopca.results$summary[which.max(out$modelSelect$nopca.results$summary$auc), ]
 
   # Take the best classifier for PCA and no PCA and retrain with new fold selection
   out$bestModel$folds <- generateFolds(targetValues, 10, T)
