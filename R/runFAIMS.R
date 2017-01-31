@@ -1,16 +1,16 @@
 setParams <- function(bestModel) {
   if (bestModel$selectionMethod == "SGoF") {
     nKeep = NULL
-    SGoF = bestModel$threshold
+    SGoF = as.numeric(bestModel$threshold)
     threshold=NULL
   } else if (bestModel$selectionMethod == "nKeep") {
-    nKeep = bestModel$threshold
+    nKeep = as.numeric(bestModel$threshold)
     SGoF = NULL
     threshold=NULL
   } else if (bestModel$selectionMethod == "threshold"){
     nKeep = NULL
     SGoF = NULL
-    threshold=bestModel$threshold
+    threshold=as.numeric(bestModel$threshold)
   } else {
     stop(paste("Unknown selection method", bestModel$selectionMethod))
   }
