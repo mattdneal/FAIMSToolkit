@@ -5,7 +5,8 @@
 \title{Run a standard analysis given a FAIMS object and class labels}
 \usage{
 runFAIMS(FAIMSObject, targetValues, models = c("rf", "glmnet", "svmRadial",
-  "svmLinear", "gbm", "nnet", "glm"))
+  "svmLinear", "gbm", "nnet", "glm"), modelSelectFolds = NULL,
+  modelSelectScores = NULL, bestModelFolds = NULL, bestModelScores = NULL)
 }
 \arguments{
 \item{FAIMSObject}{a FAIMS object}
@@ -13,6 +14,14 @@ runFAIMS(FAIMSObject, targetValues, models = c("rf", "glmnet", "svmRadial",
 \item{targetValues}{class labels}
 
 \item{models}{a list of \link{caret::train} models}
+
+\item{modelSelectFolds}{pre-generated folds for model selection}
+
+\item{modelSelectScores}{pre-generated scores for model selection}
+
+\item{bestModelFolds}{pre-generated folds for best model assessment}
+
+\item{bestModelScores}{pre-generated scores for best model assessment}
 }
 \value{
 A list of results (see out$bestModelSummary and

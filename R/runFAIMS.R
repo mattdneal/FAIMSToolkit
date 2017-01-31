@@ -23,11 +23,18 @@ setParams <- function(bestModel) {
 #' @param FAIMSObject a FAIMS object
 #' @param targetValues class labels
 #' @param models a list of \link{caret::train} models
+#' @param modelSelectFolds pre-generated folds for model selection
+#' @param modelSelectScores pre-generated scores for model selection
+#' @param bestModelFolds pre-generated folds for best model assessment
+#' @param bestModelScores pre-generated scores for best model assessment
 #'
 #' @return A list of results (see out$bestModelSummary and
 #'   out$modelSelectSummary for a summary of results)
 #' @export
-runFAIMS <- function(FAIMSObject, targetValues, models=c("rf", "glmnet", "svmRadial", "svmLinear", "gbm", "nnet", "glm")) {
+runFAIMS <- function(FAIMSObject, targetValues,
+                     models=c("rf", "glmnet", "svmRadial", "svmLinear", "gbm", "nnet", "glm"),
+                     modelSelectFolds=NULL, modelSelectScores=NULL,
+                     bestModelFolds=NULL, bestModelScores=NULL) {
   out <- list()
   out$waveletData <- as.data.frame(WaveletTransform(FAIMSObject))
   out$targetValues.scrambled <- sample(targetValues)
@@ -36,15 +43,21 @@ runFAIMS <- function(FAIMSObject, targetValues, models=c("rf", "glmnet", "svmRad
   out$bestModel <- list()
 
   # Select a classifier method
-  out$modelSelect$folds <- generateFolds(targetValues, 10, T)
+  if (is.null(modelSelectFolds)) {
+    out$modelSelect$folds <- generateFolds(targetValues, 10, T)
+  } else {
+    out$modelSelect$folds <- modelSelectFolds
+  }
+
   out$modelSelect$pca.cv <- CrossValidation(out$waveletData,
                                             targetValues,
                                             models=models,
                                             PCA=T,
                                             nKeep=c(2^(1:10)),
-                                            SGoF = c(0.1, 0.05, 0.025, 0.01, 0.005),
+                                            SGoF=c(0.1, 0.05, 0.025, 0.01, 0.005),
                                             folds=out$modelSelect$folds,
-                                            nFolds=10)
+                                            nFolds=10,
+                                            precomputedScores=modelSelectScores)
 
   out$modelSelect$scores <- out$modelSelect$pca.cv$scores
   out$modelSelect$nopca.cv <- CrossValidation(out$waveletData,
@@ -67,8 +80,11 @@ runFAIMS <- function(FAIMSObject, targetValues, models=c("rf", "glmnet", "svmRad
     out$modelSelect$nopca.results$summary[which.max(out$modelSelect$nopca.results$summary$auc), ]
 
   # Take the best classifier for PCA and no PCA and retrain with new fold selection
-  out$bestModel$folds <- generateFolds(targetValues, 10, T)
-
+  if (is.null(bestModelFolds)) {
+    out$bestModel$folds <- generateFolds(targetValues, 10, T)
+  } else {
+    out$bestModel$folds <- bestModelFolds
+  }
   params <- setParams(out$modelSelect$pca.bestModel)
   out$bestModel$pca.cv <-
     CrossValidation(out$waveletData,
@@ -79,7 +95,8 @@ runFAIMS <- function(FAIMSObject, targetValues, models=c("rf", "glmnet", "svmRad
                     SGoF=params$SGoF,
                     threshold=params$threshold,
                     folds=out$bestModel$folds,
-                    nFolds=10)
+                    nFolds=10,
+                    precomputedScores=modelSelectScores)
   out$bestModel$scores <- out$bestModel$pca.cv$scores
 
   params <- setParams(out$modelSelect$nopca.bestModel)
