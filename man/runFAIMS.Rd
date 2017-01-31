@@ -6,7 +6,8 @@
 \usage{
 runFAIMS(FAIMSObject, targetValues, models = c("rf", "glmnet", "svmRadial",
   "svmLinear", "gbm", "nnet", "glm"), modelSelectFolds = NULL,
-  modelSelectScores = NULL, bestModelFolds = NULL, bestModelScores = NULL)
+  modelSelectScores = NULL, bestModelFolds = NULL, bestModelScores = NULL,
+  waveletData = NULL)
 }
 \arguments{
 \item{FAIMSObject}{a FAIMS object}
@@ -22,6 +23,8 @@ runFAIMS(FAIMSObject, targetValues, models = c("rf", "glmnet", "svmRadial",
 \item{bestModelFolds}{pre-generated folds for best model assessment}
 
 \item{bestModelScores}{pre-generated scores for best model assessment}
+
+\item{waveletData}{pre-computed wavelet data}
 }
 \value{
 A list of results (see out$bestModelSummary and

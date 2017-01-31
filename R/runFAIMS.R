@@ -27,6 +27,7 @@ setParams <- function(bestModel) {
 #' @param modelSelectScores pre-generated scores for model selection
 #' @param bestModelFolds pre-generated folds for best model assessment
 #' @param bestModelScores pre-generated scores for best model assessment
+#' @param waveletData pre-computed wavelet data
 #'
 #' @return A list of results (see out$bestModelSummary and
 #'   out$modelSelectSummary for a summary of results)
@@ -34,9 +35,14 @@ setParams <- function(bestModel) {
 runFAIMS <- function(FAIMSObject, targetValues,
                      models=c("rf", "glmnet", "svmRadial", "svmLinear", "gbm", "nnet", "glm"),
                      modelSelectFolds=NULL, modelSelectScores=NULL,
-                     bestModelFolds=NULL, bestModelScores=NULL) {
+                     bestModelFolds=NULL, bestModelScores=NULL,
+                     waveletData=NULL) {
   out <- list()
-  out$waveletData <- as.data.frame(WaveletTransform(FAIMSObject))
+  if (is.null(waveletData)) {
+    out$waveletData <- as.data.frame(WaveletTransform(FAIMSObject))
+  } else {
+    out$waveletData <- waveletData
+  }
   out$targetValues.scrambled <- sample(targetValues)
 
   out$modelSelect <- list()
