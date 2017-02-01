@@ -6,6 +6,7 @@
 #'
 #' @return NULL
 #'
+#' @export
 #' @importFrom pROC plot.roc
 plotRocCurve <- function(rocCurve, titleString="", ci=TRUE) {
   if (!ci) {

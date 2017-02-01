@@ -299,8 +299,8 @@ CrossValidation <- function(data.train,
                             value = fold)
     ##SEPARATE DATA INTO TRAINING, TEST SETS
     index           = which(folds == fold)
-    testData        = data.train[index,]
-    trainingData    = data.train[-index,]
+    testData        = data.train[index, , drop=FALSE]
+    trainingData    = data.train[-index, , drop=FALSE]
     trainingTargets = targetValues[-index]
     extraTrainingData = extraData[-index, , drop=FALSE]
     extraTestData = extraData[index, , drop=FALSE]
