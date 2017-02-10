@@ -1,7 +1,7 @@
 Package: FAIMSToolkit
 Type: Package
 Title: Tools to aid in the analysis of FAIMS data
-Version: 0.2.8
+Version: 0.2.9
 Authors@R: as.person(c(
     "Matthew Neal <mattdneal@gmail.com> [aut, cre]",
     "Richard Savage <r.s.savage@warwick.ac.uk> [aut]"

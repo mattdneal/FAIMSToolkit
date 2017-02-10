@@ -20,17 +20,13 @@ evidence_for_k <- function(prcompObj, k) {
 }
 
 select_k <- function(prcompObj) {
-  best.k <- 1
-  best.k.evidence <- evidence_for_k(prcompObj, best.k)
+  max.k <- length(prcompObj$sdev) - 1
+  if (max.k == 1) return(2)
+  evidence <- evidence_for_k(prcompObj, 1:max.k)
   continue <- TRUE
-  for (k in 2:(length(prcompObj$sdev) - 1)) {
-    new.k <- k
-    new.k.evidence <- evidence_for_k(prcompObj, new.k)
-    if (new.k.evidence > best.k.evidence) {
-      best.k <- new.k
-      best.k.evidence <- new.k.evidence
-    } else {
-      return(best.k)
+  for (i in 1:(max.k - 1)) {
+    if (evidence[i] > evidence[i + 1]) {
+      return(i)
     }
   }
   return(length(prcompObj$sdev))
