@@ -58,7 +58,7 @@ runFAIMS <- function(FAIMSObject, targetValues,
     out$modelSelect$folds <- modelSelectFolds
   }
 
-  if (nKeep=TRUE) {
+  if (nKeep) {
     nKeep.pca <- 2^(0:10)
     nKeep.nopca <- 2^(0:8)
   } else {
@@ -66,7 +66,7 @@ runFAIMS <- function(FAIMSObject, targetValues,
     nKeep.nopca <- NULL
   }
 
-  if (SGoF=TRUE) {
+  if (SGoF) {
     SGoF.pca <- c(0.2, 0.1, 0.05, 0.01, 0.001)
   } else {
     SGoF.pca <- NULL

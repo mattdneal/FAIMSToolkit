@@ -7,7 +7,7 @@
 runFAIMS(FAIMSObject, targetValues, models = c("rf", "glmnet", "svmRadial",
   "svmLinear", "gbm", "nnet", "glm"), modelSelectFolds = NULL,
   modelSelectScores = NULL, bestModelFolds = NULL, bestModelScores = NULL,
-  waveletData = NULL)
+  waveletData = NULL, SGoF = TRUE, nKeep = TRUE)
 }
 \arguments{
 \item{FAIMSObject}{a FAIMS object}
@@ -25,6 +25,11 @@ runFAIMS(FAIMSObject, targetValues, models = c("rf", "glmnet", "svmRadial",
 \item{bestModelScores}{pre-generated scores for best model assessment}
 
 \item{waveletData}{pre-computed wavelet data}
+
+\item{SGoF}{Select variables using sequential goodness of fit? (only for PCA
+analysis)}
+
+\item{nKeep}{Select variables using keep top N?}
 }
 \value{
 A list of results (see out$bestModelSummary and
