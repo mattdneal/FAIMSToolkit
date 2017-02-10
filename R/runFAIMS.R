@@ -28,6 +28,9 @@ setParams <- function(bestModel) {
 #' @param bestModelFolds pre-generated folds for best model assessment
 #' @param bestModelScores pre-generated scores for best model assessment
 #' @param waveletData pre-computed wavelet data
+#' @param SGoF Select variables using sequential goodness of fit? (only for PCA
+#'   analysis)
+#' @param nKeep Select variables using keep top N?
 #'
 #' @return A list of results (see out$bestModelSummary and
 #'   out$modelSelectSummary for a summary of results)
@@ -36,7 +39,7 @@ runFAIMS <- function(FAIMSObject, targetValues,
                      models=c("rf", "glmnet", "svmRadial", "svmLinear", "gbm", "nnet", "glm"),
                      modelSelectFolds=NULL, modelSelectScores=NULL,
                      bestModelFolds=NULL, bestModelScores=NULL,
-                     waveletData=NULL) {
+                     waveletData=NULL, SGoF=TRUE, nKeep=TRUE) {
   out <- list()
   if (is.null(waveletData)) {
     out$waveletData <- as.data.frame(WaveletTransform(FAIMSObject))
@@ -55,11 +58,26 @@ runFAIMS <- function(FAIMSObject, targetValues,
     out$modelSelect$folds <- modelSelectFolds
   }
 
+  if (nKeep=TRUE) {
+    nKeep.pca <- 2^(0:10)
+    nKeep.nopca <- 2^(0:8)
+  } else {
+    nKeep.pca <- NULL
+    nKeep.nopca <- NULL
+  }
+
+  if (SGoF=TRUE) {
+    SGoF.pca <- c(0.2, 0.1, 0.05, 0.01, 0.001)
+  } else {
+    SGoF.pca <- NULL
+  }
+
   out$modelSelect$pca.cv <- CrossValidation(out$waveletData,
                                             targetValues,
                                             models=models,
                                             PCA=T,
-                                            nKeep=c(2^(0:8)),
+                                            nKeep=nKeep.pca,
+                                            SGoF=SGoF.pca,
                                             folds=out$modelSelect$folds,
                                             nFolds=10,
                                             precomputedScores=modelSelectScores)
@@ -69,7 +87,7 @@ runFAIMS <- function(FAIMSObject, targetValues,
                                               targetValues,
                                               models=models,
                                               PCA=F,
-                                              nKeep=c(2^(0:8)),
+                                              nKeep=nKeep.nopca,
                                               folds=out$modelSelect$folds,
                                               nFolds=10,
                                               precomputedScores=out$modelSelect$scores

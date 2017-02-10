@@ -152,10 +152,10 @@ runFold <- function(trainingData,
   if (PCA & ncol(trainingData) > 1){
     model.pca = prcomp(trainingData)
     cum.var   = 0
-    k         = 1
-    while (cum.var<0.95) {  ## Choose the principal components that explain 95% of the variance
-      k       = k+1        # ALWAYS KEEP AT LEAST TWO PCs
-      cum.var = sum(model.pca$sdev[1:k]^2)/sum(model.pca$sdev^2)
+    k         = select_k(model.pca)
+    if (k==1) {
+      warning("Only 1 PC selected. Increasing to k=2")
+      k <- max(k, 2)
     }
     trainingData = as.data.frame(model.pca$x[,1:k])
     cat('No. Principal Components= ', k, fill=TRUE)
