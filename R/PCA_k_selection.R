@@ -23,15 +23,15 @@ select_k <- function(prcompObj) {
   best.k <- 1
   best.k.evidence <- evidence_for_k(prcompObj, best.k)
   continue <- TRUE
-  while (continue) {
-    new.k <- best.k + 1
+  for (k in 2:(length(prcompObj$sdev) - 1)) {
+    new.k <- k
     new.k.evidence <- evidence_for_k(prcompObj, new.k)
     if (new.k.evidence > best.k.evidence) {
       best.k <- new.k
       best.k.evidence <- new.k.evidence
     } else {
-      continue <- FALSE
+      return(best.k)
     }
   }
-  return(best.k)
+  return(length(prcompObj$sdev))
 }
