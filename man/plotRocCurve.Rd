@@ -16,4 +16,3 @@ plotRocCurve(rocCurve, titleString = "", ci = TRUE)
 \description{
 Plot a ROC curve with CI
 }
-

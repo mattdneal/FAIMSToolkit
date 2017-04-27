@@ -19,4 +19,3 @@ a \code{nrow(dataMatrix)} by \code{k} matrix with the mean k-nn
 \description{
 Compute mean k-nn distances for outlier detection
 }
-

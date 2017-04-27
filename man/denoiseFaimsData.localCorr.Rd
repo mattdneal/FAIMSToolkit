@@ -22,4 +22,3 @@ The signal in FAIMS data exhibits a high degree of local correlation. This
 function zeroes out a fraction of pixels with the lowest degree of local
 correlation.
 }
-

@@ -26,4 +26,3 @@ Search for directories containing FAIMS data below a specified directory, and
 return a named matrix with one row per directory. Multiple file patterns may
 be passed as a character vector to combine multiple files per directory.
 }
-

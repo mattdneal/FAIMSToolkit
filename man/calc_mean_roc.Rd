@@ -13,4 +13,3 @@ calc_mean_roc(predictions_list, targets_list, points, fixed_axis,
 \description{
 Title
 }
-

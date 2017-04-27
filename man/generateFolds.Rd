@@ -23,4 +23,3 @@ Title Generate a division of a data set into folds
 classes <- sample(c(rep(TRUE, 20), rep(FALSE, 50)), 70)
 folds <- generateFolds(classes, 10, T)
 }
-

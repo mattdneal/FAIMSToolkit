@@ -41,4 +41,3 @@ predictions for this fold
 \description{
 Utility function to create predictions for a given fold and set of variables
 }
-

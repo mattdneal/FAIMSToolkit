@@ -25,4 +25,3 @@ If keepMatrixData=TRUE, the output inherits both FAIMS and FAIMSArray.
 Otherwise, it only inherits FAIMSArray and will not work with functions which
 require FAIMS objects.
 }
-

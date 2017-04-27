@@ -22,4 +22,3 @@ each row is therefore the 1D representation of the 2D data for a single item
 This means that this function needs to know the underlying dimensionality of
 the 2D FAIMS run
 }
-

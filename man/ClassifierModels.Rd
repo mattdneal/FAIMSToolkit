@@ -31,4 +31,3 @@ These are the predicted probabililty of \code{targetValues==TRUE}
 \description{
 Run a set of classification models on input training, test data sets
 }
-

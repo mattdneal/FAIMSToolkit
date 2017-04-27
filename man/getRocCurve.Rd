@@ -26,4 +26,3 @@ a \link{pROC::roc} object
 \description{
 Return a ROC curve object, given input class probabilities
 }
-

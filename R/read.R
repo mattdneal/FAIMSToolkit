@@ -222,9 +222,13 @@ ReadInFaimsDirectoriesMultiFile <- function(dataPath,
 ReadInFaimsDirectoriesAutosampler <- function(dataPath, numRuns,
                                               filePattern='.*[.](txt|asc)',
                                               runNumPattern='[0-9]+[.](txt|asc)',
-                                              dec=".", minFlowRate=1.9) {
+                                              dec=".", minFlowRate=1.9,
+                                              dirPattern=".*") {
 
-  dirList    = list.dirs(dataPath, recursive=FALSE)
+  dirList <- list.dirs(dataPath, recursive=FALSE)
+  dirIndex <- grepl(dirPattern, dirList)
+  dirList <- dirList[dirIndex]
+
   folderNames <- sapply(strsplit(dirList, "/"), function(x) x[length(x)])
 
   numSamples <- length(dirList)

@@ -20,4 +20,3 @@ A FAIMS object
 \description{
 Read in FAIMS data from a list of files
 }
-

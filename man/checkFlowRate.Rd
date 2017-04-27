@@ -18,4 +18,3 @@ data frame listing minimum flow rate per folder
 \description{
 Check the minimum flow rates for all the runs in a dataset
 }
-

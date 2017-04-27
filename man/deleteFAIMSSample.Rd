@@ -17,4 +17,3 @@ a FAIMS object
 \description{
 Delete samples from a FAIMS object
 }
-

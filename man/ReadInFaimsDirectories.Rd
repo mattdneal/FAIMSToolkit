@@ -28,4 +28,3 @@ that there is at least one ingested file for each directory in
 /code{dataPath}, and return a warning if not. If multiple matching files are
 found an error will be thrown.
 }
-

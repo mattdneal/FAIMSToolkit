@@ -38,4 +38,3 @@ A list of results (see out$bestModelSummary and
 \description{
 Run a standard analysis given a FAIMS object and class labels
 }
-

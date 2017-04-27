@@ -20,4 +20,3 @@ plotFAIMSdata(FAIMSObject, rowsToPlot, plotLayout = 1, absolute = T, ...)
 \description{
 Plot FAIMS data matrices
 }
-

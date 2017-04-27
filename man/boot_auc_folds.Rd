@@ -15,4 +15,3 @@ boot_auc_folds(predictions, folds, targets, num_samples = 1000,
 Compute the ROC curve separately for each fold, and compute the mean
 ROC curve, instead of pooling predictions.
 }
-

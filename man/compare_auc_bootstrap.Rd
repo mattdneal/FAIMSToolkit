@@ -16,4 +16,3 @@ compare_auc_bootstrap(roc_1, roc_2, rep = 10000)
 \description{
 Compute a bootstrap of the difference between two ROC curve AUCs
 }
-

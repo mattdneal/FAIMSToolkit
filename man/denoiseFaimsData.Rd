@@ -24,4 +24,3 @@ from all pixels by taking the fractionToRemove quantile of all the values in
 the noise pixels, and subtracts this from the absolute value of each pixels,
 zeroing any values which are negative after subtracting background noise.
 }
-

@@ -17,4 +17,3 @@ a list of scores, one for each sample. Lower is better.
 \description{
 perform a feature selection using a Wilcoxon rank-sum test
 }
-

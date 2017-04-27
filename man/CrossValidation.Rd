@@ -59,4 +59,3 @@ A list of predictions for the given model combinations, ready to be
 \description{
 Cross-validation for classification models
 }
-

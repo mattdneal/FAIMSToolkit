@@ -6,7 +6,7 @@
 \usage{
 ReadInFaimsDirectoriesAutosampler(dataPath, numRuns,
   filePattern = ".*[.](txt|asc)", runNumPattern = "[0-9]+[.](txt|asc)",
-  dec = ".", minFlowRate = 1.9)
+  dec = ".", minFlowRate = 1.9, dirPattern = ".*")
 }
 \arguments{
 \item{dataPath}{The directory to scan for data}
@@ -29,4 +29,3 @@ A FAIMS object
 \description{
 Read FAIMS data generated using an autosampler
 }
-

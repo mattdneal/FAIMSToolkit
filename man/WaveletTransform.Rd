@@ -18,4 +18,3 @@ a matrix of wavelet-transformed FAIMS data
 \description{
 Perform a 1D wavelet transform on a FAIMS data matrix
 }
-
