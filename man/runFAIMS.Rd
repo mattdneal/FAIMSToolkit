@@ -7,7 +7,7 @@
 runFAIMS(FAIMSObject, targetValues, models = c("rf", "glmnet", "svmRadial",
   "svmLinear", "gbm", "nnet", "glm"), modelSelectFolds = NULL,
   modelSelectScores = NULL, bestModelFolds = NULL, bestModelScores = NULL,
-  waveletData = NULL, SGoF = TRUE, nKeep = TRUE)
+  waveletData = NULL, SGoF = TRUE, nKeep = TRUE, extraData = NULL)
 }
 \arguments{
 \item{FAIMSObject}{a FAIMS object}
@@ -30,6 +30,8 @@ runFAIMS(FAIMSObject, targetValues, models = c("rf", "glmnet", "svmRadial",
 analysis)}
 
 \item{nKeep}{Select variables using keep top N?}
+
+\item{extraData}{Additional data to feed to the classifier}
 }
 \value{
 A list of results (see out$bestModelSummary and

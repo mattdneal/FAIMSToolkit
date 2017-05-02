@@ -31,6 +31,7 @@ setParams <- function(bestModel) {
 #' @param SGoF Select variables using sequential goodness of fit? (only for PCA
 #'   analysis)
 #' @param nKeep Select variables using keep top N?
+#' @param extraData Additional data to feed to the classifier
 #'
 #' @return A list of results (see out$bestModelSummary and
 #'   out$modelSelectSummary for a summary of results)
@@ -39,7 +40,8 @@ runFAIMS <- function(FAIMSObject, targetValues,
                      models=c("rf", "glmnet", "svmRadial", "svmLinear", "gbm", "nnet", "glm"),
                      modelSelectFolds=NULL, modelSelectScores=NULL,
                      bestModelFolds=NULL, bestModelScores=NULL,
-                     waveletData=NULL, SGoF=TRUE, nKeep=TRUE) {
+                     waveletData=NULL, SGoF=TRUE, nKeep=TRUE,
+                     extraData=NULL) {
   out <- list()
   if (is.null(waveletData)) {
     out$waveletData <- as.data.frame(WaveletTransform(FAIMSObject))
@@ -80,7 +82,8 @@ runFAIMS <- function(FAIMSObject, targetValues,
                                             SGoF=SGoF.pca,
                                             folds=out$modelSelect$folds,
                                             nFolds=10,
-                                            precomputedScores=modelSelectScores)
+                                            precomputedScores=modelSelectScores,
+                                            extraData=extraData)
 
   out$modelSelect$scores <- out$modelSelect$pca.cv$scores
   out$modelSelect$nopca.cv <- CrossValidation(out$waveletData,
@@ -90,7 +93,8 @@ runFAIMS <- function(FAIMSObject, targetValues,
                                               nKeep=nKeep.nopca,
                                               folds=out$modelSelect$folds,
                                               nFolds=10,
-                                              precomputedScores=out$modelSelect$scores
+                                              precomputedScores=out$modelSelect$scores,
+                                              extraData=extraData
                                               )
 
   out$modelSelect$pca.results <- CrossValRocCurves(out$modelSelect$pca.cv)
@@ -119,7 +123,8 @@ runFAIMS <- function(FAIMSObject, targetValues,
                     threshold=params$threshold,
                     folds=out$bestModel$folds,
                     nFolds=10,
-                    precomputedScores=bestModelScores)
+                    precomputedScores=bestModelScores,
+                    extraData=extraData)
   out$bestModel$scores <- out$bestModel$pca.cv$scores
 
   params <- setParams(out$modelSelect$nopca.bestModel)
@@ -134,7 +139,8 @@ runFAIMS <- function(FAIMSObject, targetValues,
                     threshold=params$threshold,
                     folds=out$bestModel$folds,
                     nFolds=10,
-                    precomputedScores=out$bestModel$scores)
+                    precomputedScores=out$bestModel$scores,
+                    extraData=extraData)
 
   out$bestModel$pca.results <- CrossValRocCurves(out$bestModel$pca.cv)
   out$bestModel$nopca.results <- CrossValRocCurves(out$bestModel$nopca.cv)
@@ -150,7 +156,8 @@ runFAIMS <- function(FAIMSObject, targetValues,
                     SGoF=params$SGoF,
                     threshold=params$threshold,
                     folds=out$bestModel$folds,
-                    nFolds=10)
+                    nFolds=10,
+                    extraData=extraData)
   out$bestModel$scrambled.scores <- out$bestModel$scrambled.pca.cv$scores
 
   params <- setParams(out$modelSelect$nopca.bestModel)
@@ -165,7 +172,8 @@ runFAIMS <- function(FAIMSObject, targetValues,
                     threshold=params$threshold,
                     folds=out$bestModel$folds,
                     nFolds=10,
-                    precomputedScores=out$bestModel$scrambled.scores)
+                    precomputedScores=out$bestModel$scrambled.scores,
+                    extraData=extraData)
 
   out$bestModel$scrambled.pca.results <- CrossValRocCurves(out$bestModel$scrambled.pca.cv)
   out$bestModel$scrambled.nopca.results <- CrossValRocCurves(out$bestModel$scrambled.nopca.cv)
