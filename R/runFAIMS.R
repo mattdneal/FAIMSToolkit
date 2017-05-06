@@ -44,6 +44,7 @@ runFAIMS <- function(FAIMSObject, targetValues,
                      extraData=NULL) {
   out <- list()
   if (is.null(waveletData)) {
+    if (is.null(FAIMSObject)) stop("FAIMSObject not supplied")
     out$waveletData <- as.data.frame(WaveletTransform(FAIMSObject))
   } else {
     out$waveletData <- waveletData
