@@ -4,7 +4,8 @@
 \alias{plotFAIMSdata}
 \title{Plot FAIMS data matrices}
 \usage{
-plotFAIMSdata(FAIMSObject, rowsToPlot, plotLayout = 1, absolute = T, ...)
+plotFAIMSdata(FAIMSObject, rowsToPlot, plotLayout = 1, absolute = T,
+  ...)
 }
 \arguments{
 \item{rowsToPlot}{the rows to plot}

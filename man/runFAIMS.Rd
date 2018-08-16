@@ -4,10 +4,11 @@
 \alias{runFAIMS}
 \title{Run a standard analysis given a FAIMS object and class labels}
 \usage{
-runFAIMS(FAIMSObject, targetValues, models = c("rf", "glmnet", "svmRadial",
-  "svmLinear", "gbm", "nnet", "glm"), modelSelectFolds = NULL,
-  modelSelectScores = NULL, bestModelFolds = NULL, bestModelScores = NULL,
-  waveletData = NULL, SGoF = TRUE, nKeep = TRUE, extraData = NULL)
+runFAIMS(FAIMSObject, targetValues, models = c("rf", "glmnet",
+  "svmRadial", "svmLinear", "gbm", "nnet", "glm"),
+  modelSelectFolds = NULL, modelSelectScores = NULL,
+  bestModelFolds = NULL, bestModelScores = NULL, waveletData = NULL,
+  SGoF = TRUE, nKeep = TRUE, extraData = NULL)
 }
 \arguments{
 \item{FAIMSObject}{a FAIMS object}

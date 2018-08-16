@@ -4,7 +4,8 @@
 \alias{WaveletTransform_2D}
 \title{Perform a 2D wavelet transform on a FAIMS data matrix}
 \usage{
-WaveletTransform_2D(FAIMSObject, cropSize = NULL, discardHighestNLevels = 2)
+WaveletTransform_2D(FAIMSObject, cropSize = NULL,
+  discardHighestNLevels = 2)
 }
 \arguments{
 \item{FAIMSObject}{A FAIMS object}

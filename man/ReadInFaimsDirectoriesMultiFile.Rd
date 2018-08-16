@@ -4,8 +4,8 @@
 \alias{ReadInFaimsDirectoriesMultiFile}
 \title{Read and combine multiple FAIMS data files per sample}
 \usage{
-ReadInFaimsDirectoriesMultiFile(dataPath, filePatterns = ".*[.](txt|asc)",
-  dec = ".", minFlowRate = 1.9)
+ReadInFaimsDirectoriesMultiFile(dataPath,
+  filePatterns = ".*[.](txt|asc)", dec = ".", minFlowRate = 1.9)
 }
 \arguments{
 \item{dataPath}{the directory containing the data}

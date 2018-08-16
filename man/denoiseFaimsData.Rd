@@ -4,7 +4,8 @@
 \alias{denoiseFaimsData}
 \title{Remove background noise from FAIMS data}
 \usage{
-denoiseFaimsData(faimsObject, fractionNoise = 0.05, fractionToRemove = 0.99)
+denoiseFaimsData(faimsObject, fractionNoise = 0.05,
+  fractionToRemove = 0.99)
 }
 \arguments{
 \item{fractionNoise}{The percentage of pixels to identify as "noise"}

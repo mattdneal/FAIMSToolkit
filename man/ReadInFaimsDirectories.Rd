@@ -4,8 +4,8 @@
 \alias{ReadInFaimsDirectories}
 \title{Read in FAIMS files from a set of directories}
 \usage{
-ReadInFaimsDirectories(dataPath, filePattern = ".*[.](txt|asc)", dec = ".",
-  minFlowRate = 1.9)
+ReadInFaimsDirectories(dataPath, filePattern = ".*[.](txt|asc)",
+  dec = ".", minFlowRate = 1.9)
 }
 \arguments{
 \item{dataPath}{the directory containing the data}
