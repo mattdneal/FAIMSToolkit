@@ -2,14 +2,28 @@
 % Please edit documentation in R/rocCurves.R
 \name{calc_mean_roc}
 \alias{calc_mean_roc}
-\title{Title}
+\title{Calculate the mean ROC curve from a list of predictors and targets}
 \usage{
-calc_mean_roc(predictions_list, targets_list, points, fixed_axis,
-  boot_index = NULL, return_folds = FALSE)
+calc_mean_roc(predictions_list, targets_list, points,
+  fixed_axis = c("specificity", "sensitivity"), boot_index = NULL,
+  return_folds = FALSE)
 }
 \arguments{
-\item{boot_index}{}
+\item{predictions_list}{list of predictors}
+
+\item{targets_list}{list of targets}
+
+\item{points}{points to calculate the ROC curves at}
+
+\item{fixed_axis}{whether \code{points} fixes sensitivity or specificity}
+
+\item{boot_index}{list of bootstrap indices for each fold. Generated automatically if NULL}
+
+\item{return_folds}{if TRUE, return the ROC curve and AUC for each fold as well as the mean}
+}
+\value{
+list containing mean ROC curve and AUC
 }
 \description{
-Title
+Calculate the mean ROC curve from a list of predictors and targets
 }

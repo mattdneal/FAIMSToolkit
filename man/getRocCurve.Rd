@@ -14,11 +14,11 @@ getRocCurve(predictions, targetValues, titleString = "", ci = FALSE,
 
 \item{titleString}{title string if \code{plotCurve==TRUE}}
 
-\item{ci}{Compute confidence interval?}
+\item{ci}{logical - compute confidence interval?}
 
-\item{lr}{Compute likelihood ratios?}
+\item{lr}{logical - compute likelihood ratios?}
 
-\item{plotCurve}{plot the resulting ROC curve?}
+\item{plotCurve}{logical - plot the resulting ROC curve?}
 }
 \value{
 a \link{pROC::roc} object

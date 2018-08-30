@@ -31,9 +31,9 @@ plotRocCurve <- function(rocCurve, titleString="", ci=TRUE) {
 #' @param predictions vector of predictions
 #' @param targetValues vector of class labels
 #' @param titleString title string if \code{plotCurve==TRUE}
-#' @param ci Compute confidence interval?
-#' @param lr Compute likelihood ratios?
-#' @param plotCurve plot the resulting ROC curve?
+#' @param ci logical - compute confidence interval?
+#' @param lr logical - compute likelihood ratios?
+#' @param plotCurve logical - plot the resulting ROC curve?
 #'
 #' @return a \link{pROC::roc} object
 #' @export
@@ -245,22 +245,22 @@ CrossValRocCurves <- function(crossVal.obj) {
   return(out)
 }
 
-#' Title
+#' Calculate the mean ROC curve from a list of predictors and targets
 #'
-#' @param predictions_list
-#' @param targets_list
-#' @param points
-#' @param fixed_axis
-#' @param boot_index
+#' @param predictions_list list of predictors
+#' @param targets_list list of targets
+#' @param points points to calculate the ROC curves at
+#' @param fixed_axis whether \code{points} fixes sensitivity or specificity
+#' @param boot_index list of bootstrap indices for each fold. Generated automatically if NULL
+#' @param return_folds if TRUE, return the ROC curve and AUC for each fold as well as the mean
 #'
-#' @return
+#' @return list containing mean ROC curve and AUC
 #' @import pROC
 #'
-#' @examples
 calc_mean_roc <- function(predictions_list,
                           targets_list,
                           points,
-                          fixed_axis,
+                          fixed_axis=c("specificity", "sensitivity"),
                           boot_index=NULL,
                           return_folds=FALSE) {
   num_folds <- length(predictions_list)
@@ -456,7 +456,7 @@ plot_booted_roc_curve <- function(roc_list, ci=0.95, ...) {
 #' @param roc_2 second ROC curve (from pROC)
 #' @param rep number of bootstrap samples
 #'
-#' @return
+#' @return bootstrap of the difference in AUC
 #' @export
 #'
 #' @import pROC
