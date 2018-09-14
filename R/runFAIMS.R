@@ -113,81 +113,108 @@ runFAIMS <- function(FAIMSObject, targetValues,
   } else {
     out$bestModel$folds <- bestModelFolds
   }
-  params <- setParams(out$modelSelect$pca.bestModel)
-  out$bestModel$pca.cv <-
-    CrossValidation(out$waveletData,
-                    targetValues,
-                    models=unique(c("glm", params$model)),
-                    PCA=T,
-                    nKeep=params$nKeep,
-                    SGoF=params$SGoF,
-                    threshold=params$threshold,
-                    folds=out$bestModel$folds,
-                    nFolds=10,
-                    precomputedScores=bestModelScores,
-                    extraData=extraData)
-  out$bestModel$scores <- out$bestModel$pca.cv$scores
 
-  params <- setParams(out$modelSelect$nopca.bestModel)
+  out$bestModel$scores <- bestModelScores
+  out$bestModel$scrambled.scores <- NULL
 
-  out$bestModel$nopca.cv <-
-    CrossValidation(out$waveletData,
-                    targetValues,
-                    models=unique(c("glm", params$model)),
-                    PCA=F,
-                    nKeep=params$nKeep,
-                    SGoF=params$SGoF,
-                    threshold=params$threshold,
-                    folds=out$bestModel$folds,
-                    nFolds=10,
-                    precomputedScores=out$bestModel$scores,
-                    extraData=extraData)
-
-  out$bestModel$pca.results <- CrossValRocCurves(out$bestModel$pca.cv)
-  out$bestModel$nopca.results <- CrossValRocCurves(out$bestModel$nopca.cv)
-
-  # Rerun the best classifier for PCA and no PCA with scrambled class labels
-  params <- setParams(out$modelSelect$pca.bestModel)
-  out$bestModel$scrambled.pca.cv <-
-    CrossValidation(out$waveletData,
-                    out$targetValues.scrambled,
-                    models=unique(c("glm", params$model)),
-                    PCA=T,
-                    nKeep=params$nKeep,
-                    SGoF=params$SGoF,
-                    threshold=params$threshold,
-                    folds=out$bestModel$folds,
-                    nFolds=10,
-                    extraData=extraData)
-  out$bestModel$scrambled.scores <- out$bestModel$scrambled.pca.cv$scores
-
-  params <- setParams(out$modelSelect$nopca.bestModel)
-
-  out$bestModel$scrambled.nopca.cv <-
-    CrossValidation(out$waveletData,
-                    out$targetValues.scrambled,
-                    models=unique(c("glm", params$model)),
-                    PCA=F,
-                    nKeep=params$nKeep,
-                    SGoF=params$SGoF,
-                    threshold=params$threshold,
-                    folds=out$bestModel$folds,
-                    nFolds=10,
-                    precomputedScores=out$bestModel$scrambled.scores,
-                    extraData=extraData)
-
-  out$bestModel$scrambled.pca.results <- CrossValRocCurves(out$bestModel$scrambled.pca.cv)
-  out$bestModel$scrambled.nopca.results <- CrossValRocCurves(out$bestModel$scrambled.nopca.cv)
-
-  out$bestModelSummary <-
-    rbind(cbind(PCA=TRUE, out$bestModel$pca.results$summary),
-          cbind(PCA=FALSE, out$bestModel$nopca.results$summary))
-  out$bestModelSummary.scrambled <-
-    rbind(cbind(PCA=TRUE, out$bestModel$scrambled.pca.results$summary),
-          cbind(PCA=FALSE, out$bestModel$scrambled.nopca.results$summary))
   out$modelSelectSummary <-
     rbind(cbind(PCA=TRUE, out$modelSelect$pca.results$summary),
           cbind(PCA=FALSE, out$modelSelect$nopca.results$summary))
+
+  out$bestModelSummary <- NULL
+  out$bestModelSummary.scrambled <- NULL
+
+
+
+  params <- tryCatch(setParams(out$modelSelect$pca.bestModel),
+                     error = function(e) {
+                       warning(e)
+                       return(NA)
+                     }
+  )
+  if (!identical(NA, params)) {
+    out$bestModel$pca.cv <-
+      CrossValidation(out$waveletData,
+                      targetValues,
+                      models=unique(c("glm", params$model)),
+                      PCA=T,
+                      nKeep=params$nKeep,
+                      SGoF=params$SGoF,
+                      threshold=params$threshold,
+                      folds=out$bestModel$folds,
+                      nFolds=10,
+                      precomputedScores=bestModelScores,
+                      extraData=extraData)
+    out$bestModel$scores <- out$bestModel$pca.cv$scores
+
+    out$bestModel$pca.results <- CrossValRocCurves(out$bestModel$pca.cv)
+
+    #rerun with scrambled classes
+    out$bestModel$scrambled.pca.cv <-
+      CrossValidation(out$waveletData,
+                      out$targetValues.scrambled,
+                      models=unique(c("glm", params$model)),
+                      PCA=T,
+                      nKeep=params$nKeep,
+                      SGoF=params$SGoF,
+                      threshold=params$threshold,
+                      folds=out$bestModel$folds,
+                      nFolds=10,
+                      extraData=extraData)
+    out$bestModel$scrambled.scores <- out$bestModel$scrambled.pca.cv$scores
+    out$bestModel$scrambled.pca.results <- CrossValRocCurves(out$bestModel$scrambled.pca.cv)
+
+    out$bestModelSummary <- rbind(out$bestModelSummary,
+                                  cbind(PCA=TRUE, out$bestModel$pca.results$summary)
+    )
+    out$bestModelSummary.scrambled <- rbind(out$bestModelSummary.scrambled,
+                                            cbind(PCA=TRUE, out$bestModel$scrambled.pca.results$summary)
+    )
+  }
+  params <- tryCatch(setParams(out$modelSelect$nopca.bestModel),
+                     error = function(e) {
+                       warning(e)
+                       return(NA)
+                     }
+  )
+  if (!identical(NA, params)) {
+    out$bestModel$nopca.cv <-
+      CrossValidation(out$waveletData,
+                      targetValues,
+                      models=unique(c("glm", params$model)),
+                      PCA=F,
+                      nKeep=params$nKeep,
+                      SGoF=params$SGoF,
+                      threshold=params$threshold,
+                      folds=out$bestModel$folds,
+                      nFolds=10,
+                      precomputedScores=out$bestModel$scores,
+                      extraData=extraData)
+
+    out$bestModel$nopca.results <- CrossValRocCurves(out$bestModel$nopca.cv)
+
+    out$bestModel$scrambled.nopca.cv <-
+      CrossValidation(out$waveletData,
+                      out$targetValues.scrambled,
+                      models=unique(c("glm", params$model)),
+                      PCA=F,
+                      nKeep=params$nKeep,
+                      SGoF=params$SGoF,
+                      threshold=params$threshold,
+                      folds=out$bestModel$folds,
+                      nFolds=10,
+                      precomputedScores=out$bestModel$scrambled.scores,
+                      extraData=extraData)
+    out$bestModel$scrambled.nopca.results <- CrossValRocCurves(out$bestModel$scrambled.nopca.cv)
+
+
+    out$bestModelSummary <- rbind(out$bestModelSummary,
+                                  cbind(PCA=FALSE, out$bestModel$nopca.results$summary)
+    )
+    out$bestModelSummary.scrambled <- rbind(out$bestModelSummary.scrambled,
+                                            cbind(PCA=FALSE, out$bestModel$scrambled.nopca.results$summary)
+    )
+  }
 
   return(out)
 }
