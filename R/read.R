@@ -1,10 +1,11 @@
 
-FAIMSObjectFactory <- function(data, faimsDim, minFlowRate) {
+FAIMSObjectFactory <- function(data, faimsDim, minFlowRate, timestamps=NULL) {
   out <- list()
   class(out) <- "FAIMS"
   out$data <- data
   out$faimsDim <- faimsDim
   out$minFlowRate <- minFlowRate
+  out$timestamps <- timestamps
   return(out)
 }
 
@@ -51,10 +52,13 @@ ReadInFaimsData <- function(fileList,
   data = matrix(0, nFiles, numPixels)
 
   minFlowRateVec <- numeric(nFiles)
+  timestamps <- numeric(nFiles)
   ##----------------------------------------------------------------------
   ## READ IN ALL THE DATA FILES ------------------------------------------
   ##----------------------------------------------------------------------
   for (i in 1:nFiles){
+    file_time <- scan(fileList[i], skip=1, what=character(), nmax=7, sep="", quiet=T)[5:7]
+    timestamps[i] <- as.numeric(strptime(paste(file_time[1:2], collapse = " "), format="%T %d/%m/%Y", tz=file_time[3]))
     monitoringData <- matrix(scan(fileList[i],
                                   skip=63,
                                   nlines=nlines,
@@ -71,7 +75,7 @@ ReadInFaimsData <- function(fileList,
     dataVector = c(data.positiveIon, data.negativeIon)
     data[i,] = dataVector
   }
-  out <- FAIMSObjectFactory(data=data, faimsDim=faimsDim, minFlowRate=minFlowRateVec)
+  out <- FAIMSObjectFactory(data=data, faimsDim=faimsDim, minFlowRate=minFlowRateVec, timestamps=timestamps)
   out$ReadInFaimsData <- list()
   out$ReadInFaimsData$argList <- as.list(match.call())
   return(out)
@@ -125,6 +129,7 @@ ReadInFaimsDirectories <- function(dataPath,
   out$ReadInFaimsDirectories$dataFiles <- dataFiles
   row.names(out$data) = fileFolderNames
   names(out$minFlowRate) = fileFolderNames
+  names(out$timestamps) = fileFolderNames
 
   return(out)
 }
@@ -164,6 +169,7 @@ ReadInFaimsDirectoriesMultiFile <- function(dataPath,
       dataMatrix <- newData$data
       faimsDim <- newData$faimsDim
       minFlowRateMatrix <- as.matrix(newData$minFlowRate)
+      timestampsMatrix <- as.matrix(newData$timestamps)
 
     } else {
 
@@ -179,6 +185,8 @@ ReadInFaimsDirectoriesMultiFile <- function(dataPath,
         rownames(dataMatrix) <- currentNames
         minFlowRateMatrix <- cbind(minFlowRateMatrix[currentNames, ],
                                    newData$minFlowRate[currentNames])
+        timestampsMatrix <- cbind(timestampsMatrix[currentNames, ],
+                                   newData$timestamps[currentNames])
         rownames(minFlowRateMatrix) <- currentNames
 
       } else {
@@ -195,7 +203,7 @@ ReadInFaimsDirectoriesMultiFile <- function(dataPath,
 
   colnames(minFlowRateMatrix) <- filePatterns
 
-  out <- FAIMSObjectFactory(data=dataMatrix, faimsDim=faimsDim, minFlowRate=minFlowRateMatrix)
+  out <- FAIMSObjectFactory(data=dataMatrix, faimsDim=faimsDim, minFlowRate=minFlowRateMatrix, timestamps=timestampsMatrix)
   out$ReadInFaimsData <- ReadInFaimsData
   out$ReadInFaimsDirectories <- ReadInFaimsDirectories
 
@@ -236,6 +244,7 @@ ReadInFaimsDirectoriesAutosampler <- function(dataPath, numRuns,
   numFiles <- numeric(numSamples)
   names(numFiles) <- dirList
   minFlowRateMatrix <- matrix(0, numSamples, numRuns)
+  timestampMatrix <- matrix(0, numSamples, numRuns)
 
   rowNum <- 1
   for (dir in dirList) {
@@ -257,6 +266,7 @@ ReadInFaimsDirectoriesAutosampler <- function(dataPath, numRuns,
     sampleData <- ReadInFaimsData(dataFiles, dec=dec, minFlowRate=minFlowRate)
     sampleRow <- as.numeric(t(sampleData$data))
     minFlowRateMatrix[rowNum, ] <- sampleData$minFlowRate
+    timestampMatrix[rowNum, ] <- sampleData$timestamps
     if (is.null(dataMatrix)) {
       dataMatrix <- matrix(0, nrow=numSamples, ncol=length(sampleRow))
       faimsDim <- sampleData$faimsDim
@@ -268,7 +278,7 @@ ReadInFaimsDirectoriesAutosampler <- function(dataPath, numRuns,
   rownames(dataMatrix) <- folderNames
   rownames(minFlowRateMatrix) <- folderNames
 
-  out <- FAIMSObjectFactory(data=dataMatrix, faimsDim=faimsDim, minFlowRate=minFlowRateMatrix)
+  out <- FAIMSObjectFactory(data=dataMatrix, faimsDim=faimsDim, minFlowRate=minFlowRateMatrix, timestamps = timestampMatrix)
   out$ReadInFaimsDirectoriesAutosampler$dirList <- dirList
   out$ReadInFaimsDirectoriesAutosampler$argList <- as.list(match.call())
 

@@ -44,3 +44,28 @@ checkFlowRate <- function(dir, threshold=1.9, filePattern='.*[.](txt|asc)', move
   }
   return(out)
 }
+
+#' Check for FAIMS drift
+#'
+#' @param faims a faims object
+#' @param index the samples to include. NULL (the default) includes all samples
+#' @param ... other parameters to pass to plot
+#'
+#' @return a list with the correlation, a 95% confidence interval, and the matched rankings.
+#' @export
+checkDrift <- function(faims, index=NULL, ...) {
+  if (is.null(index)) {
+    index <- 1:nrow(faims$data)
+  }
+  faims_dist <- as.numeric(dist(faims$data[index,]))
+  time_dist <- as.numeric(dist(faims$timestamps[index, 1]))
+  include <- time_dist != 0
+  faims_dist <- faims_dist[include]
+  time_dist <- time_dist[include]
+  data <- data.frame(time_rank=rank(time_dist, ties.method="random"), dist_rank=rank(faims_dist, ties.method = "random"))
+  plot(data[,1], data[,2], xlab="Time distance rank", ylab="Data distance rank", ...)
+  boot.out <- boot::boot(data, function(data, index) cor(data[index,1], data[index,2]), R=10000)
+  cor <- cor(data[,1], data[,2])
+  cor.ci <- boot::boot.ci(boot.out, conf = 0.95, type = "bca")
+  return(list(cor=cor, cor.ci=cor.ci, data=data))
+}

@@ -1,7 +1,7 @@
 Package: FAIMSToolkit
 Type: Package
 Title: Tools to aid in the analysis of FAIMS data
-Version: 0.2.14
+Version: 0.2.15
 Authors@R: as.person(c(
     "Matthew Neal <mattdneal@gmail.com> [aut, cre]",
     "Richard Savage <r.s.savage@warwick.ac.uk> [aut]"
@@ -11,14 +11,15 @@ Description: Tools for ingesting and analysing FAIMS data
 License: MIT
 LazyData: TRUE
 Encoding: UTF-8
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Imports:
   caret,
   pROC,
   wavethresh,
   tcltk,
   lattice,
-  grid
+  grid,
+  boot
 Suggests:
   GPLVM,
   viridis
