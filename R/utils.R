@@ -1,3 +1,8 @@
+#' Initialise a progress bar object
+#'
+#' @param range the range of values to cover
+#'
+#' @return a progress bar object
 progBarInit <- function(range) {
   cat("0%")
   cat(rep(" ", 17), sep="")
@@ -12,6 +17,12 @@ progBarInit <- function(range) {
   out <- list(range=range, current=range[1], done=FALSE)
 }
 
+#' Update a progress bar object
+#'
+#' @param a progress bar object
+#' @param the value to update the bar to
+#'
+#' @return an update progress bar object
 progBarUpdate <- function(bar.obj, new.value) {
   if (!bar.obj$done) {
     while(bar.obj$current < new.value) {

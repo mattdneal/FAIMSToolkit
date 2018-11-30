@@ -10,7 +10,11 @@ checkFlowRate(dir, threshold = 1.9, filePattern = ".*[.](txt|asc)",
 \arguments{
 \item{dir}{Directory pat to check}
 
+\item{threshold}{Threshold for flow rate}
+
 \item{filePattern}{Regex pattern of exported FAIMS files}
+
+\item{moveTo}{Folder to move low flow rate files to}
 }
 \value{
 data frame listing minimum flow rate per folder

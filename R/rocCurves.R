@@ -303,15 +303,15 @@ calc_mean_roc <- function(predictions_list,
 #' Compute the ROC curve separately for each fold, and compute the mean
 #' ROC curve, instead of pooling predictions.
 #'
-#' @param predictions
-#' @param folds
-#' @param targets
-#' @param num_samples
-#' @param alt_predictions
-#' @param fixed_axis
-#' @param points
+#' @param predictions sample predictions
+#' @param folds vector of fold classification for each sample
+#' @param targets target values
+#' @param num_samples number of bootstrap samples to take
+#' @param alt_predictions alternative predictions to compare
+#' @param fixed_axis whether to fix sensitivity or specificity in the ROC curves
+#' @param points number of points to calculate for ROC curves
 #'
-#' @return
+#' @return bootstrapped ROC curves
 boot_auc_folds <- function(predictions,
                            folds,
                            targets,

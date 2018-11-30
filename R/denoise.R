@@ -55,6 +55,16 @@ denoiseFaimsData <- function(faimsObject, fractionNoise=0.05, fractionToRemove=0
   return(out)
 }
 
+#' Get Neighbour Indices
+#'
+#' Return the vector indices of a matrix cell's neighbours
+#'
+#' @param index index of the cell in the vector
+#' @param width width of neighbourhood
+#' @param height height of neighbourhood
+#' @param faimsDim FAIMS matrix dimensions
+#'
+#' @return a vector of neighbour indices
 getNeighbourIndices <- function(index, width, height, faimsDim) {
   rowNeighbours <- (index - width):(index + width)
   keepRowNeighbours <- ceiling(rowNeighbours / faimsDim[1]) == ceiling(index / faimsDim[1])

@@ -1,3 +1,11 @@
+#' Significant Goodness of Fit
+#'
+#' Select features using the Significant Goodness of Fit meta-test
+#'
+#' @param scores a list of feature p-values
+#' @param alpha the significance level for the test
+#'
+#' @return The selected features' indices
 SGoF <- function(scores, alpha) {
   observed <- sum(scores < alpha)
   expected <- qbinom(prob=alpha, size=length(scores), p=1 - alpha)
@@ -5,6 +13,14 @@ SGoF <- function(scores, alpha) {
   return(order(scores, decreasing=F)[1:diff])
 }
 
+#' Select features by threshold
+#'
+#' Select features whose score exceeds a given threshold
+#'
+#' @param scores a list of feature p-values
+#' @param threshold p-value threshold
+#'
+#' @return A list of feature indices
 threshold <- function(scores, threshold) {
   selected <- which(scores < threshold)
   selected <- selected[order(scores[selected], decreasing=F)]
@@ -12,11 +28,17 @@ threshold <- function(scores, threshold) {
   return(selected)
 }
 
+#' Select the top n features
+#'
+#' @param scores a list of feature p-values
+#' @param nKeep the number to keep
+#'
+#' @return A list if feature indices
 nKeep <- function(scores, nKeep) {
   return(order(scores, decreasing=F)[1:nKeep])
 }
 
-#' Title Generate a division of a data set into folds
+#' Generate a division of a data set into folds
 #'
 #' @param targetValues the class labels
 #' @param nFolds number of folds

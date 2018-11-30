@@ -2,7 +2,7 @@
 % Please edit documentation in R/crossValidation.R
 \name{generateFolds}
 \alias{generateFolds}
-\title{Title Generate a division of a data set into folds}
+\title{Generate a division of a data set into folds}
 \usage{
 generateFolds(targetValues, nFolds, stratified = T)
 }
@@ -17,7 +17,7 @@ generateFolds(targetValues, nFolds, stratified = T)
 a vector giving the fold for each sample
 }
 \description{
-Title Generate a division of a data set into folds
+Generate a division of a data set into folds
 }
 \examples{
 classes <- sample(c(rep(TRUE, 20), rep(FALSE, 50)), 70)

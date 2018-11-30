@@ -1,3 +1,11 @@
+#' Calculate the Evidence for k
+#'
+#' Calculate the evidence for retaining k PCs in a PCA analysis, as in Minka 2000, "Automatic Choice of dimensionality for PCA"
+#'
+#' @param prcompObj a prcomp object
+#' @param k k to assess
+#'
+#' @return log evidence for retaining k PCs
 evidence_for_k <- function(prcompObj, k) {
   log.evidence <- numeric(length(k))
   # Using formula from Minka 2000, "Automatic Choice of dimensionality for PCA"
@@ -19,6 +27,13 @@ evidence_for_k <- function(prcompObj, k) {
   return(log.evidence)
 }
 
+#' Select PCA PCs to retain
+#'
+#' Select the number of PCs k to retain based on the evidence for each model. As per Minka 2000, "Automatic Choice of dimensionality for PCA".
+#'
+#' @param prcompObj a prcomp object
+#'
+#' @return k
 select_k <- function(prcompObj) {
   max.k <- length(prcompObj$sdev) - 1
   if (max.k == 1) return(2)

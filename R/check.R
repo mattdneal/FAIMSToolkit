@@ -1,7 +1,9 @@
 #' Check the minimum flow rates for all the runs in a dataset
 #'
 #' @param dir Directory pat to check
+#' @param threshold Threshold for flow rate
 #' @param filePattern Regex pattern of exported FAIMS files
+#' @param moveTo Folder to move low flow rate files to
 #'
 #' @return data frame listing minimum flow rate per folder
 #' @export

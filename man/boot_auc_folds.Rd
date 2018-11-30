@@ -9,7 +9,22 @@ boot_auc_folds(predictions, folds, targets, num_samples = 1000,
   points = seq(0, 1, by = 0.01), stratified = T)
 }
 \arguments{
-\item{points}{}
+\item{predictions}{sample predictions}
+
+\item{folds}{vector of fold classification for each sample}
+
+\item{targets}{target values}
+
+\item{num_samples}{number of bootstrap samples to take}
+
+\item{alt_predictions}{alternative predictions to compare}
+
+\item{fixed_axis}{whether to fix sensitivity or specificity in the ROC curves}
+
+\item{points}{number of points to calculate for ROC curves}
+}
+\value{
+bootstrapped ROC curves
 }
 \description{
 Compute the ROC curve separately for each fold, and compute the mean
